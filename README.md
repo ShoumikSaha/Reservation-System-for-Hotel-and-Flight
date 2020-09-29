@@ -19,3 +19,4 @@ A web based hotel and flight booking application
   * Run the server
     * ```cd HotelFlight```
     * ```python3 manage.py runserver```
+## Check __Software_Document.pdf__ for details
