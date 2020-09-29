@@ -1,0 +1,96 @@
+{% extends "search/base.html" %}
+
+{% load static %}
+{% load url_replace %}
+{% load url_get %}
+{% load widget_tweaks %}
+
+
+{% block title %}Search Hotels{% endblock title %}
+
+{% block css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'search/styles/bootstrap4/bootstrap.min.css' %}">
+    <link href="{% static 'search/plugins/font-awesome-4.7.0/css/font-awesome.min.css' %}" rel="stylesheet"
+          type="text/css">
+    <link rel="stylesheet" type="text/css" href="{% static 'search/styles/search.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'search/styles/single_listing_styles.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'search/styles/responsive.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'gijgo/js/gijgo.min.css' %}">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+{% endblock css %}
+
+{% block content %}
+
+    <div class="offers">
+        <div class="hero-image"
+             style="background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url({% static 'search/images/single_background.jpg' %})">
+            <div class="hero-text">
+                <h1 style="margin-top:150px">Confirm Booking</h1>
+            </div>
+        </div>
+        <div style="">
+            <div style="margin-top:25px;margin-right:50px;margin-left:50px;padding: 20px;">
+                <div class="row" style="background-color: lightblue">
+                    <div class="col-lg-10">
+                        <h1 class="hotel_title">{{ hotel.Hotel_Name }}</h1>
+                        {{ hotel.Hotel_Location }}, {{ hotel.Hotel_Country }}
+                        <br><br>
+                        <h2>Selected room :</h2>
+                        <ul>
+                            <li><h5>Room type : {{ room.RoomType }}</h5></li>
+                            <li><h5>Total rooms : {{ request.GET.room }}</h5></li>
+                            <li><h5>Single bed : {{ room.SingleBedCount }}</h5></li>
+                            <li><h5>Double bed : {{ room.DoubleBedCount }}</h5></li>
+                        </ul>
+                    </div>
+                    <div class="col-lg-2">
+                        <h2>Price:</h2><br/>
+                        <div class="offers_price">
+                            {{ room.Price }}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row" style="background-color: lightgreen;margin-top:50px;margin-bottom: 50px;padding: 50px">
+                    <h1 style="margin-bottom: 40px;">Confirm Booking :</h1>
+                    <div class="">
+                        <form action="bookingpayment?{{ request.GET.urlencode }}" method="get" id="search_form_2"
+                              class="search_panel_content d-flex flex-lg-row flex-column align-items-lg-center align-items-start justify-content-lg-between justify-content-start">
+
+                            <div class="search_item">
+                                <div>First name :</div>
+                                {% render_field form.first_name class="from search_input" placeholder="Enter your first name" value=user.first_name %}
+                            </div>
+                            <div class="search_item">
+                                <div>Last name</div>
+                                {% render_field form.last_name class="to search_input" placeholder="Enter your last name" value=user.last_name %}
+                            </div>
+                            <div class="search_item">
+                                <div>E-mail</div>
+                                {% render_field form.email class="from search_input" placeholder="E-mail" value=user.email %}
+                            </div>
+                            <div class="search_item">
+                                <div>Phone</div>
+                                {% render_field form.phone class="search_input" placeholder="Phone no" value=user.Phone %}
+                            </div>
+                            <input type="hidden" name="hoteldest" value="{{ request.GET.hoteldest }}"/>
+                            <input type="hidden" name="checkin" value="{{ request.GET.checkin }}"/>
+                            <input type="hidden" name="checkout" value="{{ request.GET.checkout }}"/>
+                            <input type="hidden" name="hid" value="{{ request.GET.hid }}"/>
+                            <input type="hidden" name="huid" value="{{ request.GET.huid }}"/>
+                            <input type="hidden" name="hrid" value="{{ request.GET.hrid }}"/>
+                            <input type="hidden" name="uid" value="{{ user.id }}"/>
+                            <button class="button search_button">Confirm booking<span></span><span></span><span></span></button>
+                            {% csrf_token %}
+                        </form>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}

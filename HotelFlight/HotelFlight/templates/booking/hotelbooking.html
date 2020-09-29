@@ -1,0 +1,417 @@
+{% extends "search/base.html" %}
+
+{% load static %}
+{% load url_replace %}
+{% load url_get %}
+{% load widget_tweaks %}
+{% load room_images %}
+
+
+{% block title %}Book room at {{ hotel.Hotel_Name }}{% endblock title %}
+
+{% block css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'search/styles/bootstrap4/bootstrap.min.css' %}">
+    <link href="{% static 'search/plugins/font-awesome-4.7.0/css/font-awesome.min.css' %}" rel="stylesheet"
+          type="text/css">
+    <link rel="stylesheet" type="text/css" href="{% static 'search/styles/search.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'search/styles/single_listing_styles.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'search/styles/responsive.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'gijgo/js/gijgo.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'adminpanel/sidebar.css' %}">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+{% endblock css %}
+
+{% block content %}
+    <div class="offers">
+        <div class="hero-image"
+             style="background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url({% static 'search/images/single_background.jpg' %})">
+            <div class="hero-text">
+                <h1 style="margin-top:150px">Confirm Booking</h1>
+            </div>
+        </div>
+        <div class="">
+            <div class="row">
+                <div class="col-lg-3" style="display: flex;min-height: 650px;">
+                    <div class="search" style="align-items: stretch">
+                        <div class="search_inner">
+                            <!-- Search Contents -->
+
+                            <div class="container fill_height no-padding">
+                                <div class="row no-margin">
+                                    <div class="col  no-padding">
+                                        <!-- Search Tabs -->
+
+                                        <div class="search_tabs_container">
+                                            <div class="search_tabs d-flex flex-lg-row flex-column align-items-lg-center align-items-start justify-content-lg-between justify-content-start">
+                                                <div class="search_tab active d-flex flex-row align-items-center justify-content-lg-center justify-content-start">
+                                                    <img src="{% static 'search/images/suitcase.png' %}"
+                                                         alt=""><span>hotels</span>
+                                                </div>
+                                                <div class="search_tab d-flex flex-row align-items-center justify-content-lg-center justify-content-start">
+                                                    <img src="{% static 'search/images/departure.png' %}" alt="">flights
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                        <div class="search_panel active">
+                                            <form action="{% url 'searchHotelPage' %} " id="search_form_1" method="get"
+                                                  class="search_panel_content d-flex flex-lg-row flex-column align-items-lg-center align-items-start justify-content-lg-between justify-content-start">
+                                                <div class="search_item">
+                                                    <div>destination</div>
+                                                    {% render_field hotelForm.hoteldest class="destination search_input" placeholder=hotelForm.hoteldest.label value=request.GET.hoteldest %}
+                                                </div>
+                                                <div class="search_item">
+                                                    <div>check in</div>
+                                                    {% render_field hotelForm.checkin class="check_in search_input" placeholder=hotelForm.checkin.label %}
+                                                </div>
+                                                <div class="search_item">
+                                                    <div>check out</div>
+                                                    {% render_field hotelForm.checkout class="check_out search_input" placeholder=hotelForm.checkout.label %}
+                                                </div>
+                                                <div class="search_item">
+                                                    <div>room</div>
+                                                    {% render_field hotelForm.room class="search_input room" placeholder=hotelForm.room.label %}
+                                                </div>
+                                                <div class="search_item">
+                                                    <div>adults</div>
+                                                    {% render_field hotelForm.adult class="search_input" placeholder=hotelForm.adult.label %}
+                                                </div>
+                                                <button class="button search_button">
+                                                    search<span></span><span></span><span></span>
+                                                </button>
+                                                {% csrf_token %}
+                                            </form>
+                                        </div>
+
+
+                                        <!-- Search Panel -->
+
+                                        <div class="search_panel">
+                                            <form action="{% url 'searchFlightPage' %}" id="search_form_2"
+                                                  class="search_panel_content d-flex flex-lg-row flex-column align-items-lg-center align-items-start justify-content-lg-between justify-content-start">
+
+                                                <div class="search_item">
+                                                    <div>from</div>
+                                                    {% render_field flightForm.source class="from search_input" placeholder=flightForm.source.label %}
+                                                </div>
+                                                <div class="search_item">
+                                                    <div>to</div>
+                                                    {% render_field flightForm.dest class="to search_input" placeholder=flightForm.dest.label %}
+                                                </div>
+                                                <div class="search_item">
+                                                    <div>depart</div>
+                                                    {% render_field flightForm.depart class="from search_input" placeholder=flightForm.depart.label %}
+                                                </div>
+                                                <div class="search_item">
+                                                    <div>adults</div>
+                                                    {% render_field flightForm.adult class="search_input" placeholder=flightForm.adult.label %}
+                                                </div>
+                                                <div class="search_item">
+                                                    <div>children</div>
+                                                    {% render_field flightForm.children class="search_input" placeholder=flightForm.children.label %}
+                                                </div>
+                                                <button class="button search_button">
+                                                    search<span></span><span></span><span></span>
+                                                </button>
+                                                {% csrf_token %}
+                                            </form>
+                                        </div>
+
+
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="col-lg-9" style="margin-top:25px;margin-left:0px;">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="">
+                                    <div style="">
+                                        <!-- Title -->
+                                        <div class="hotel_title_container d-flex flex-lg-row flex-column">
+                                            <div class="hotel_title_content">
+                                                <h1 class="hotel_title">{{ hotel.Hotel_Name }}</h1>
+                                                <div class="rating_r rating_r_4 hotel_rating">
+                                                    <i></i>
+                                                    <i></i>
+                                                    <i></i>
+                                                    <i></i>
+                                                    <i></i>
+                                                </div>
+                                                <div class="hotel_location">{{ hotel.Address }},{{ hotel.Hotel_Location }},{{ hotel.Hotel_Country }}</div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Room-->
+                                        <div class="rooms">
+                                            <h3>Selected room :</h3>
+                                            <hr>
+                                            <div class="room">
+                                                <div class="row no-margin no-padding">
+                                                    <div class="col-lg-3 no-padding no-margin">
+                                                        <div class="">
+                                                            {% room_images hotel.uid room.roomID as roomImages %}
+                                                            {% with hotel.uid|stringformat:"i" as ID and room.roomID|stringformat:"i" as rID %}
+                                                                {% for firstImage in roomImages %}
+                                                                    {% if forloop.first %}
+                                                                        <img src="{% static 'media/user_'|add:ID|add:'/room_'|add:rID|add:'/'|add:firstImage %}" alt="" width="100%" height="20%">
+                                                                    {% endif %}
+                                                                {% endfor %}
+                                                            {% endwith %}
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-7">
+                                                        <div class="room_content">
+                                                            <div class="room_title">{{ room.RoomType }} Room</div>
+                                                            <div class="room_price">{{ room.NPrice }}৳/night</div>
+                                                            <div class="room_text">Selected rooms
+                                                                : {{ request.GET.room }}</div>
+                                                            <div class="room_text">Single
+                                                                bed: {{ room.SingleBedCount }}, Double
+                                                                bed: {{ room.DoubleBedCount }}</div>
+                                                            <div class="room_extra">
+                                                                <ul type="circle">
+                                                                    {% if room.Wifi %}
+                                                                        <li>Wifi</li>
+                                                                    {% endif %}
+                                                                    {% if room.Complimentary_Breakfast %}
+                                                                        <li>Complimentary Breakfast</li>
+                                                                    {% endif %}
+                                                                    {% if room.AirConditioner %}
+                                                                        <li>Air-conditioned</li>
+                                                                    {% endif %}
+                                                                </ul>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-2 text-lg-right">
+                                                        Price:<br/>
+                                                        <div class="offers_price">
+                                                            {{ room.Price }}‎৳<br/>
+                                                        </div>
+                                                         <div class="room_price">
+                                                                    {{ daysCount }} night{% if daysCount > 1 %}s{% endif %}
+                                                         </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <hr>
+                                            <!-- new -->
+                                            <div class="container" align="center">
+                                                <!-- Full-width images with number text -->
+                                                {% room_images hotel.uid room.roomID as roomImages %}
+                                                {% for image in roomImages %}
+                                                    <div class="mySlides">
+                                                        <div class="numbertext">{{ forloop.counter }}/ {{ roomImages|length }}</div>
+                                                        {% with hotel.uid|stringformat:"i" as ID and room.roomID|stringformat:"i" as rID %}
+                                                                <img src="{% static 'media/user_'|add:ID|add:'/room_'|add:rID|add:'/'|add:image %}"
+                                                                      alt="" width="70%" height="400px" class="cursor">
+                                                        {% endwith %}
+                                                    </div>
+                                                {% endfor %}
+                                                <!-- Next and previous buttons -->
+                                                <a class="prev" style="color: #fff;left:180px;top:210px;" onclick="plusSlides(-1)">&#10094;</a>
+                                                <a class="next" style="color: #fff;top:210px;right:180px;" onclick="plusSlides(1)">&#10095;</a>
+                                            </div>
+                                            <hr>
+                                        </div>
+
+                                        <div class="contact_form_container">
+                                            <div class="contact_title text-center">Confirm Booking</div>
+                                            <form action="bookingpayment?{{ request.GET.urlencode }}"
+                                                  method="get" id="contact_form" class="contact_form text-center">
+                                                <!--<input type="text" id="contact_form_name"
+                                                       class="contact_form_name input_field" placeholder="Name"
+                                                       required="required" data-error="Name is required.">-->
+                                                <div class="row">
+                                                    <div class="col-lg-6">
+                                                        <div class="contact_item">
+                                                            <div align="left">First name :</div>
+                                                            {% render_field form.first_name class="contact_form_name input_field" placeholder="Enter your first name" value=user.first_name %}
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-6">
+                                                        <div class="contact_item">
+                                                            <div align="left">Last name :</div>
+                                                            {% render_field form.last_name class="contact_form_name input_field" placeholder="Enter your last name" value=user.last_name %}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row" style="margin-top: 25px;">
+                                                    <div class="col-lg-12">
+                                                        <div class="contact_item">
+                                                            <div align="left">E-mail :</div>
+                                                            {% render_field form.email class="contact_form_email input_field" placeholder="E-mail" value=user.email %}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row" style="margin-top: 25px;">
+                                                    <div class="col-lg-12">
+                                                        <div class="contact_item">
+                                                            <div align="left">Phone no :</div>
+                                                            {% render_field form.phone class="contact_form_email input_field" placeholder="Phone no" value=user.Phone %}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <input type="hidden" name="hoteldest"
+                                                       value="{{ request.GET.hoteldest }}"/>
+                                                <input type="hidden" name="checkin"
+                                                       value="{{ request.GET.checkin }}"/>
+                                                <input type="hidden" name="checkout"
+                                                       value="{{ request.GET.checkout }}"/>
+                                                <input type="hidden" name="hid" value="{{ request.GET.hid }}"/>
+                                                <input type="hidden" name="huid"
+                                                       value="{{ request.GET.huid }}"/>
+                                                <input type="hidden" name="hrid"
+                                                       value="{{ request.GET.hrid }}"/>
+                                                <input type="hidden" name="uid" value="{{ user.id }}"/>
+                                                <input type="hidden" name="room" value="{{ request.GET.room }}"/>
+                                                <input type="hidden" name="adult" value="{{ request.GET.adult }}"/>
+                                                <button type="submit" id="form_submit_button"
+                                                        class="form_submit_button button trans_200">Confrim booking
+                                                </button>
+                                                {% csrf_token %}
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}
+
+
+{% block jscript %}
+<script>
+        function getAllUrlParams(url) {
+      // get query string from url (optional) or window
+      var queryString = url ? url.split('?')[1] : window.location.search.slice(1);
+      // we'll store the parameters here
+      var obj = {};
+      // if query string exists
+      if (queryString) {
+        // stuff after # is not part of query string, so get rid of it
+        queryString = queryString.split('#')[0];
+        // split our query string into its component parts
+        var arr = queryString.split('&');
+        for (var i = 0; i < arr.length; i++) {
+          // separate the keys and the values
+          var a = arr[i].split('=');
+          // set parameter name and value (use 'true' if empty)
+          var paramName = a[0];
+          var paramValue = typeof (a[1]) === 'undefined' ? true : a[1];
+          // (optional) keep case consistent
+          paramName = paramName.toLowerCase();
+          if (typeof paramValue === 'string') paramValue = paramValue.toLowerCase();
+          // if the paramName ends with square brackets, e.g. colors[] or colors[2]
+          if (paramName.match(/\[(\d+)?\]$/)) {
+            // create key if it doesn't exist
+            var key = paramName.replace(/\[(\d+)?\]/, '');
+            if (!obj[key]) obj[key] = [];
+            // if it's an indexed array e.g. colors[2]
+            if (paramName.match(/\[\d+\]$/)) {
+              // get the index value and add the entry at the appropriate position
+              var index = /\[(\d+)\]/.exec(paramName)[1];
+              obj[key][index] = paramValue;
+            } else {
+              // otherwise add the value to the end of the array
+              obj[key].push(paramValue);
+            }
+          } else {
+            // we're dealing with a string
+            if (!obj[paramName]) {
+              // if it doesn't exist, create property
+              obj[paramName] = paramValue;
+            } else if (obj[paramName] && typeof obj[paramName] === 'string'){
+              // if property does exist and it's a string, convert it to an array
+              obj[paramName] = [obj[paramName]];
+              obj[paramName].push(paramValue);
+            } else {
+              // otherwise add the property
+              obj[paramName].push(paramValue);
+            }
+          }
+        }
+      }
+
+      return obj;
+    }
+    let jsTomorrow = new Date();
+    jsTomorrow.setDate(new Date().getDate()+1);
+    let today = new Date().getFullYear() + "-" + ("0" + (new Date().getMonth() + 1)).slice(-2) + "-" +
+        ("0" + new Date().getDate()).slice(-2);
+    let tomorrow = jsTomorrow.getFullYear() + "-" + ("0" + (jsTomorrow.getMonth() + 1)).slice(-2) + "-" +
+        ("0" + jsTomorrow.getDate()).slice(-2);
+
+    $('#id_checkin').datepicker({
+        uiLibrary: 'bootstrap4',
+        value: getAllUrlParams().checkin ,
+        minDate: today,
+        format: 'yyyy-mm-dd',
+        size: 'small'
+    });
+    $('#id_checkout').datepicker({
+        uiLibrary: 'bootstrap4',
+        value: getAllUrlParams().checkout,
+        minDate: tomorrow,
+        format: 'yyyy-mm-dd',
+        size: 'small'
+    });
+    $('#id_depart').datepicker({
+        uiLibrary: 'bootstrap4',
+        value: getAllUrlParams().depart,
+        minDate: today,
+        format: 'yyyy-mm-dd',
+        size: 'small'
+    });
+</script>
+<script>
+    var slideIndex = 1;
+    showSlides(slideIndex);
+    // Next/previous controls
+    function plusSlides(n) {
+        showSlides(slideIndex += n);
+    }
+
+    // Thumbnail image controls
+    function currentSlide(n) {
+        showSlides(slideIndex = n);
+    }
+
+    function showSlides(n) {
+        var i;
+        var slides = document.getElementsByClassName("mySlides");
+        var dots = document.getElementsByClassName("demo");
+        var captionText = document.getElementById("caption");
+        if (n > slides.length) {
+            slideIndex = 1
+        }
+        if (n < 1) {
+            slideIndex = slides.length
+        }
+        for (i = 0; i < slides.length; i++) {
+            console.log(i);
+            slides[i].style.display = "none";
+        }
+        for (i = 0; i < dots.length; i++) {
+            dots[i].className = dots[i].className.replace(" active", "");
+        }
+        slides[slideIndex - 1].style.display = "block";
+        dots[slideIndex - 1].className += " active";
+        captionText.innerHTML = dots[slideIndex - 1].alt;
+    }
+</script>
+{% endblock jscript %}

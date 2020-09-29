@@ -1,0 +1,33 @@
+{% block jscript %}
+    <script type="text/javascript">
+        document.addEventListener('DOMContentLoaded', function () {
+            var calendarEl = document.getElementById('calendar');
+
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                height: 600,
+                plugins: ['dayGrid'],
+
+                eventRender: function (event, element) {
+                    element.attr('title', event.tooltip);
+                },
+
+                events: [
+                    {% for datum in data %}
+                        {
+                            title: 'Room(s):{{ datum.TotalRooms }},Type:{{ datum.RoomType }}   Booked by: {{ datum.first_name }} {{ datum.last_name }},  Phone:{{ datum.Phone }}, E-mail:{{ datum.email }}',
+                            description: 'test',
+                            start: '{{ datum.Checkin_Date|date:"Y-m-d" }}T14:00:00',
+                            end: '{{ datum.Checkout_Date|date:"Y-m-d" }}T12:00:00',
+                            allDay: false,
+                            color: '{% cycle '#fcd49c' 'lightblue' %}',
+                        },
+                    {% endfor %}
+                ],
+            });
+
+
+            calendar.render();
+        });
+
+    </script>
+{% endblock jscript %}

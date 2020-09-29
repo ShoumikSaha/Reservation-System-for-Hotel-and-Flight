@@ -1,0 +1,396 @@
+{% extends "search/base.html" %}
+
+{% load staticfiles %}
+{% load url_replace %}
+{% load url_get %}
+{% load widget_tweaks %}
+
+
+{% block title %}Search Hotels{% endblock title %}
+
+{% block css %}
+<link rel="stylesheet" type="text/css" href="{% static 'search/styles/bootstrap4/bootstrap.min.css' %}">
+<link href="{% static 'search/plugins/font-awesome-4.7.0/css/font-awesome.min.css' %}" rel="stylesheet"
+      type="text/css">
+<link rel="stylesheet" type="text/css" href="{% static 'search/styles/search.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'search/styles/single_listing_styles.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'search/styles/responsive.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'gijgo/js/gijgo.min.css' %}">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+{% endblock css %}
+
+{% block content %}
+<!-- Home -->
+
+<div class="offers">
+    <div class="hero-image" style="background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url({% static 'search/images/single_background.jpg' %})">
+        <div class="hero-text">
+            <h1 style="margin-top:150px">Search</h1>
+        </div>
+    </div>
+    <div class="">
+        <div class="row">
+            <div class="col-lg-3" style="display: flex;min-height: 650px;">
+                <div class="search" style="align-items: stretch">
+                    <div class="search_inner">
+                        <!-- Search Contents -->
+
+                        <div class="container fill_height no-padding">
+                            <div class="row no-margin">
+                                <div class="col no-padding">
+                                    <!-- Search Tabs -->
+
+                                    <div class="search_tabs_container">
+                                        <div class="search_tabs d-flex flex-lg-row flex-column align-items-lg-center align-items-start justify-content-lg-between justify-content-start">
+                                            <div class="search_tab active d-flex flex-row align-items-center justify-content-lg-center justify-content-start">
+                                                <img src="{% static 'search/images/suitcase.png' %}"
+                                                     alt=""><span>hotels</span>
+                                            </div>
+                                            <div class="search_tab d-flex flex-row align-items-center justify-content-lg-center justify-content-start">
+                                                <img src="{% static 'search/images/departure.png' %}" alt="">flights
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="search_panel active">
+                                        <form action="{% url 'searchHotelPage' %} " id="search_form_1" method="get"
+                                              class="search_panel_content d-flex flex-lg-row flex-column align-items-lg-center align-items-start justify-content-lg-between justify-content-start">
+                                            <div class="search_item">
+                                                <div>destination</div>
+                                                {% render_field hotelForm.hoteldest class="destination search_input" placeholder=hotelForm.hoteldest.label value=request.GET.hoteldest %}
+                                            </div>
+                                            <div class="search_item">
+                                                <div>check in</div>
+                                                {% render_field hotelForm.checkin class="check_in search_input" placeholder=hotelForm.checkin.label%}
+                                            </div>
+                                            <div class="search_item">
+                                                <div>check out</div>
+                                                {% render_field hotelForm.checkout class="check_out search_input" placeholder=hotelForm.checkout.label%}
+                                            </div>
+                                            <div class="search_item">
+                                                <div>room</div>
+                                                {% render_field hotelForm.room class="search_input room" placeholder=hotelForm.room.label %}
+                                            </div>
+                                            <div class="search_item">
+                                                <div>adults</div>
+                                                {% render_field hotelForm.adult class="search_input" placeholder=hotelForm.adult.label %}
+                                            </div>
+                                            <button class="button search_button">
+                                                search<span></span><span></span><span></span>
+                                            </button>
+                                            {% csrf_token %}
+                                        </form>
+                                    </div>
+
+
+                                    <!-- Search Panel -->
+
+                                    <div class="search_panel">
+                                        <form action="{% url 'searchFlightPage' %}" id="search_form_2"
+                                              class="search_panel_content d-flex flex-lg-row flex-column align-items-lg-center align-items-start justify-content-lg-between justify-content-start">
+
+                                            <div class="search_item">
+                                                <div>from</div>
+                                                 {% render_field flightForm.source class="from search_input" placeholder=flightForm.source.label %}
+                                            </div>
+                                            <div class="search_item">
+                                                <div>to</div>
+                                                {% render_field flightForm.dest class="to search_input" placeholder=flightForm.dest.label %}
+                                            </div>
+                                            <div class="search_item">
+                                                <div>depart</div>
+                                                {% render_field flightForm.depart class="from search_input" placeholder=flightForm.depart.label %}
+                                            </div>
+                                            <div class="search_item">
+                                                <div>adults</div>
+                                                {% render_field flightForm.adult class="search_input" placeholder=flightForm.adult.label %}
+                                            </div>
+                                            <div class="search_item">
+                                                <div>children</div>
+                                                {% render_field flightForm.children class="search_input" placeholder=flightForm.children.label %}
+                                            </div>
+                                            <button class="button search_button">search<span></span><span></span><span></span></button>
+                                             {% csrf_token %}
+                                        </form>
+                                    </div>
+
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="col-lg-9" style="margin-top:25px" style="background-color: #1b0b32">
+                <div class="container no-padding no-margin">
+                    <div class="row no-padding">
+                        <div class="offers_sorting_container">
+                            <ul class="offers_sorting">
+                                <li>
+                                    <span class="sorting_text">price</span>
+                                    <i class="fa fa-chevron-down"></i>
+                                    <ul>
+                                        <li class="sort_btn" data-isotope-option='{ "sortBy": "original-order" }'
+                                            data-parent=".price_sorting"><span>Original order</span></li>
+                                        <li class="sort_btn" data-isotope-option='{ "sortBy": "price", "sortAscending": true }'
+                                            data-parent=".price_sorting"><span>ascending</span></li>
+                                        <li class="sort_btn" data-isotope-option='{ "sortBy": "price", "sortAscending": false }'
+                                            data-parent=".price_sorting"><span>descending</span></li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <span class="sorting_text">location</span>
+                                    <i class="fa fa-chevron-down"></i>
+                                    <ul>
+                                        <li class="sort_btn" data-isotope-option='{ "sortBy": "original-order" }'>
+                                            <span>default</span></li>
+                                        <li class="sort_btn" data-isotope-option='{ "sortBy": "name" }'>
+                                            <span>alphabetical</span>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <span class="sorting_text">stars</span>
+                                    <i class="fa fa-chevron-down"></i>
+                                    <ul>
+                                        <li class="filter_btn" data-filter="*"><span>show all</span></li>
+                                        <li class="sort_btn" data-isotope-option='{ "sortBy": "stars" }'>
+                                            <span>ascending</span>
+                                        </li>
+                                        <li class="filter_btn" data-filter=".rating_3"><span>3</span></li>
+                                        <li class="filter_btn" data-filter=".rating_4"><span>4</span></li>
+                                        <li class="filter_btn" data-filter=".rating_5"><span>5</span></li>
+                                    </ul>
+                                </li>
+                                <li class="distance_item">
+                                    <span class="sorting_text">distance from center</span>
+                                    <i class="fa fa-chevron-down"></i>
+                                    <ul>
+                                        <li class="num_sorting_btn"><span>distance</span></li>
+                                        <li class="num_sorting_btn"><span>distance</span></li>
+                                        <li class="num_sorting_btn"><span>distance</span></li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <span class="sorting_text">reviews</span>
+                                    <i class="fa fa-chevron-down"></i>
+                                    <ul>
+                                        <li class="num_sorting_btn"><span>review</span></li>
+                                        <li class="num_sorting_btn"><span>review</span></li>
+                                        <li class="num_sorting_btn"><span>review</span></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+
+
+                        <!-- Offers Grid -->
+                        <div class="offers_grid">
+
+                            {% for hotel in hotels %}
+                            <!-- Offers Item -->
+                            <div class="offers_item rating_4" style="margin-bottom: 100px;">
+
+                                <div class="row">
+                                    <div class="col-lg-3">
+                                        <div class="offers_image_container">
+                                            <div class="offers_image_background">
+                                                {% with hotel.ID|stringformat:"i" as ID %}
+                                                <img src="{% static 'media/user_'|add:ID|add:'/main/0.jpg' %}" alt=""
+                                                     height="300"
+                                                     width="300">
+                                                {% endwith %}
+                                                <!--<img src="{% static 'search/images/offer_1.jpg' %}" alt="" height="300"
+                                                     width="300">-->
+                                            </div>
+                                            <div class="offer_name"><a href="{% url 'hotelRoomsPage' %}?huid={{hotel.ID}}&hid={{hotel.HID}}&{{ request.GET.urlencode }}">{{ hotel.Hotel_Name }}</a>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-8 no-padding no-margin no-gutters">
+                                        <div class="offers_content">
+                                            <div class="offers_price">{{ hotel.Price }}‎৳<span>per night</span></div>
+                                            <div class="rating_r rating_r_4 offers_rating" data-rating="4">
+                                                <i></i>
+                                                <i></i>
+                                                <i></i>
+                                                <i></i>
+                                                <i></i>
+                                            </div>
+                                            <p class="offers_text">
+                                                {{ hotel.Hotel_Location }}, {{ hotel.Hotel_Country }}
+                                            </p>
+                                            <p class="offers_text" style="font-size:12px;">
+                                                {{ hotel.Description }}
+                                            </p>
+
+                                            <div class="button book_button" style="margin-top: 18px;"><a
+                                                    href="{% url 'hotelRoomsPage' %}?huid={{hotel.ID}}&hid={{hotel.HID}}&{{ request.GET.urlencode }}">book<span></span><span></span><span></span></a></div>
+                                            <div class="offer_reviews">
+                                                <div class="offer_reviews_content">
+                                                    <div class="offer_reviews_title">very good</div>
+                                                    <div class="offer_reviews_subtitle">100 reviews</div>
+                                                </div>
+                                                <div class="offer_reviews_rating text-center">8.1</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-1"></div>
+                                </div>
+                            </div>
+                            {% endfor %}
+
+
+                        </div>
+                        <!--<div class="pagination" style="align:center">
+                            <span class="step-links">
+                                {% if hotels.has_previous %}
+                                    <a href="?{% url_replace request 'page' 1 %}">&laquo; first</a>
+                                    <a href="?{% url_replace request 'page' hotels.previous_page_number %}">previous</a>
+                                {% endif %}
+
+                                <span class="current">
+                                    Page {{ hotels.number }} of {{ hotels.paginator.num_pages }}.
+                                </span>
+
+                                {% if hotels.has_next %}
+                                    <a href="?{% url_replace request 'page' hotels.next_page_number %}">next</a>
+                                    <a href="?{% url_replace request 'page' hotels.next_page_number %}">last &raquo;</a>
+                                {% endif %}
+                            </span>
+                        </div> -->
+
+                    </div>
+                </div>
+
+            </div>
+
+
+        </div>
+    </div>
+</div>
+
+
+{% endblock content %}
+
+
+{% block jscript %}
+<script>
+
+        function getAllUrlParams(url) {
+      // get query string from url (optional) or window
+      var queryString = url ? url.split('?')[1] : window.location.search.slice(1);
+      // we'll store the parameters here
+      var obj = {};
+      // if query string exists
+      if (queryString) {
+        // stuff after # is not part of query string, so get rid of it
+        queryString = queryString.split('#')[0];
+        // split our query string into its component parts
+        var arr = queryString.split('&');
+        for (var i = 0; i < arr.length; i++) {
+          // separate the keys and the values
+          var a = arr[i].split('=');
+          // set parameter name and value (use 'true' if empty)
+          var paramName = a[0];
+          var paramValue = typeof (a[1]) === 'undefined' ? true : a[1];
+          // (optional) keep case consistent
+          paramName = paramName.toLowerCase();
+          if (typeof paramValue === 'string') paramValue = paramValue.toLowerCase();
+          // if the paramName ends with square brackets, e.g. colors[] or colors[2]
+          if (paramName.match(/\[(\d+)?\]$/)) {
+            // create key if it doesn't exist
+            var key = paramName.replace(/\[(\d+)?\]/, '');
+            if (!obj[key]) obj[key] = [];
+            // if it's an indexed array e.g. colors[2]
+            if (paramName.match(/\[\d+\]$/)) {
+              // get the index value and add the entry at the appropriate position
+              var index = /\[(\d+)\]/.exec(paramName)[1];
+              obj[key][index] = paramValue;
+            } else {
+              // otherwise add the value to the end of the array
+              obj[key].push(paramValue);
+            }
+          } else {
+            // we're dealing with a string
+            if (!obj[paramName]) {
+              // if it doesn't exist, create property
+              obj[paramName] = paramValue;
+            } else if (obj[paramName] && typeof obj[paramName] === 'string'){
+              // if property does exist and it's a string, convert it to an array
+              obj[paramName] = [obj[paramName]];
+              obj[paramName].push(paramValue);
+            } else {
+              // otherwise add the property
+              obj[paramName].push(paramValue);
+            }
+          }
+        }
+      }
+
+      return obj;
+    }
+    let jsTomorrow = new Date();
+    jsTomorrow.setDate(new Date().getDate()+1);
+    let today = new Date().getFullYear() + "-" + ("0" + (new Date().getMonth() + 1)).slice(-2) + "-" +
+        ("0" + new Date().getDate()).slice(-2);
+    let tomorrow = jsTomorrow.getFullYear() + "-" + ("0" + (jsTomorrow.getMonth() + 1)).slice(-2) + "-" +
+        ("0" + jsTomorrow.getDate()).slice(-2);
+
+    $('#id_checkin').datepicker({
+        uiLibrary: 'bootstrap4',
+        value: getAllUrlParams().checkin ,
+        minDate: today,
+        format: 'yyyy-mm-dd',
+        size: 'small'
+    });
+    $('#id_checkout').datepicker({
+        uiLibrary: 'bootstrap4',
+        value: getAllUrlParams().checkout,
+        minDate: tomorrow,
+        format: 'yyyy-mm-dd',
+        size: 'small'
+    });
+    $('#id_depart').datepicker({
+        uiLibrary: 'bootstrap4',
+        value: getAllUrlParams().depart,
+        minDate: today,
+        format: 'yyyy-mm-dd',
+        size: 'small'
+    });
+
+
+    // testing isotop
+    // init isotope
+    var $offers = $('.offers_grid').isotope({
+        itemSelector: '.offers_item',
+        getSortData: {
+            price: function (itemElem) {
+                var price = $(itemElem).find('.offers_price').text().replace('‎৳', '').replace("per night", "");
+                return parseFloat(price);
+            },
+        }
+    });
+
+    var sortBtn = $('.sort_btn');
+    sortBtn.each(function()
+    {
+        $(this).on('click', function()
+        {
+            var parent = $(this).parent().parent().find('.sorting_text');
+            parent.text($(this).text());
+            var option = $(this).attr('data-isotope-option');
+            option = JSON.parse( option );
+            console.log(option)
+            $offers.isotope( option );
+        });
+    });
+</script>
+{% endblock jscript %}

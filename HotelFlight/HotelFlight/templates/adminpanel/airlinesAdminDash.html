@@ -1,0 +1,198 @@
+{% extends "search/base.html" %}
+
+{% load static %}
+{% load url_replace %}
+{% load url_get %}
+{% load widget_tweaks %}
+
+
+{% block title %}Dashboard | {{ request.user }}{% endblock title %}
+
+{% block css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'search/styles/bootstrap4/bootstrap.min.css' %}">
+    <link href="{% static 'search/plugins/font-awesome-4.7.0/css/font-awesome.min.css' %}" rel="stylesheet"
+          type="text/css">
+    <link rel="stylesheet" type="text/css" href="{% static 'search/styles/search.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'search/styles/single_listing_styles.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'search/styles/responsive.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'gijgo/js/gijgo.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'adminpanel/sidebar.css' %}">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+{% endblock css %}
+
+{% block content %}
+
+    <div class="offers">
+
+        <div class="hero-image"
+             style="height:24.5%;background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url({% static 'search/images/single_background.jpg' %})">
+        </div>
+
+        <!-- Sidebar -->
+        <div class="">
+            <div class="row">
+                <div class="col-lg-2" style="display: flex">
+                    <nav id="sidebar">
+                        <div class="sidebar-header">
+                            <h3>Options</h3>
+                        </div>
+
+                        <ul class="list-unstyled components">
+                            <p>Dashboard</p>
+                            <li class="">
+                                <a href="{% url 'airlinesAdminDash' %}">Dashboard</a>
+                            </li>
+                            <li class="">
+                                <a href="{% url 'airlinesAdminNotifications' %}">
+                                    Notifications
+                                    {% if count > 0 %}
+                                        <span class="badge">{{ count }}</span>
+                                    {% endif %}
+                                </a>
+                            </li>
+
+                             <li>
+                                <a href="{% url 'airlinesAdminAddRoute' %}">Add Route</a>
+                            </li>
+                            <li>
+                                <a href="{% url 'airlinesAdminAddFlight' %}">Add Flight</a>
+                            </li>
+                            <li>
+                                <a href="{% url 'airlinesAdminAddFlightRoute' %}">Add Flight to a route</a>
+                            </li>
+                            <li>
+                                <a href="{% url 'airlinesAdminViewFlights' %}">View Flights</a>
+                            </li>
+
+                            <li class="">
+                                <a href="{% url 'airlinesAdminBookings' %}">View Bookings</a>
+                            </li>
+                            <li class="">
+                                <a href="{% url 'airlinesAdminBookingsToday' %}">View Today's Bookings</a>
+                            </li>
+
+                            <li>
+                                <a href="{% url 'airlinesAdminCalendar' %}">Calendar</a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+                <div class="col-lg-9" style="width: 60%; margin-top: 50pt;">
+
+                    <style>
+                        .container {
+                            width: 60%;
+                            height: 60%;
+                        }
+                    </style>
+
+                    <div class="container">
+                        <div class="row">
+                            <canvas id="myChart" ></canvas>
+                        </div>
+
+                        <div class="row" style="margin-top: 50pt;">
+                            <canvas id="myChart2" ></canvas>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col-lg-10">
+                </div>
+
+                <div class="col-lg-2">
+                    <div class="row">
+                        <b>Total Income: </b> {{ income }} BDT
+                    </div>
+
+                </div>
+                </body>
+
+                    <!--script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.js"></script -->
+                    <!--script src="https://code.jquery.com/jquery-3.3.1.min.js"></script -->
+                    <!-- <script src="static/siteadmin/js/linechart.js"></script>  -->
+                    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+                </body>
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}
+
+{% block jscript %}
+    <script>
+
+        //FOR LINE
+        var row;
+        var yLabel = [];
+        var xLabel = [];
+        {% for row in data1 %}
+            yLabel.push({{ row.0 }});
+            xLabel.push('{{ row.1 }}');
+        {% endfor %}
+
+
+        var ctx = document.getElementById('myChart').getContext('2d');
+        var chart = new Chart(ctx, {
+            // The type of chart we want to create
+            type: 'line',
+
+            // The data for our dataset
+            data: {
+                //labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+
+
+                labels: xLabel,
+                datasets: [{
+                    label: 'Revenue from Flight Booking per Day',
+                    backgroundColor: 'rgb(100, 100, 255)',
+                    borderColor: 'rgb(100, 100, 255)',
+                    //data: [0, 10, 5, 2, 20, 30, 45]
+                    data: yLabel
+                }]
+            },
+
+            // Configuration options go here
+            options: {}
+        });
+
+        //FOR PIE
+        var row2;
+        var yLabel2 = [];
+        var xLabel2 = [];
+        var color = [];
+        var i=0;
+        var temp;
+        {% for row2 in data3 %}
+            yLabel2.push({{ row2.0 }});
+            xLabel2.push('{{ row2.2 }}' + '-' + '{{ row2.3 }}');
+            temp = 150-i*20;
+            //var temp2 = 'rgb(' + str(temp) + ', ' + str(temp) + ', 255),';
+            //color.push(temp2);
+            i=i+1;
+        {% endfor %}
+
+
+        data = {
+                datasets: [{
+                    //data: [10, 20, 30],
+                    data: yLabel2,
+                    backgroundColor: 'rgb(255, 100, 100)',
+                    //backgroundColor: color
+                }],
+
+                // These labels appear in the legend and in the tooltips when hovering different arcs
+                labels: xLabel2
+
+
+            };
+        var ctx2 = document.getElementById('myChart2').getContext('2d');
+        var myPieChart = new Chart(ctx2, {
+            type: 'pie',
+            data: data
+        });
+
+    </script>
+{% endblock jscript %}

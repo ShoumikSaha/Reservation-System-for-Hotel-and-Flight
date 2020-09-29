@@ -1,0 +1,281 @@
+{% extends "search/base.html" %}
+
+{% load static %}
+{% load url_replace %}
+{% load url_get %}
+{% load widget_tweaks %}
+
+
+{% block title %}Hotels | Admin{% endblock title %}
+
+{% block css %}
+<link rel="stylesheet" type="text/css" href="{% static 'search/styles/bootstrap4/bootstrap.min.css' %}">
+<link href="{% static 'search/plugins/font-awesome-4.7.0/css/font-awesome.min.css' %}" rel="stylesheet"
+      type="text/css">
+<link rel="stylesheet" type="text/css" href="{% static 'search/styles/search.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'search/styles/single_listing_styles.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'search/styles/responsive.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'gijgo/js/gijgo.min.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'adminpanel/sidebar.css' %}">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<style>
+    #hotelTable {
+        font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    #hotelTable td, #hotelTable th {
+        border: 1px solid #ddd;
+        padding: 10px;
+    }
+
+    #hotelTable tr:nth-child(even) {
+        background: linear-gradient(to top right, #fcd49c, #bd99ff);
+    }
+
+    #hotelTable tr:hover {
+        background: #50a6fb;
+    }
+
+    #hotelTable th {
+        padding-top: 12px;
+        padding-bottom: 12px;
+        background-color: #350a4e;
+        color: white;
+        cursor: pointer;
+    }
+
+    #hotelInput {
+        background-image: url({% static 'siteadmin/search.png' %});
+        background-position: 5px 5px;
+        background-repeat: no-repeat;
+        width: 100%;
+        font-size: 16px;
+        padding: 12px 20px 12px 50px;
+        border: 1px solid #ddd;
+        margin-bottom: 12px;
+    }
+</style>
+
+{% endblock css %}
+
+{% block content %}
+
+<div class="offers">
+
+    <div class="hero-image"
+         style="height:24.5%;background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url({% static 'search/images/single_background.jpg' %})">
+    </div>
+
+    <!-- Sidebar -->
+    <div class="">
+        <div class="row">
+            <div class="col-lg-2" style="display: flex">
+                <nav id="sidebar">
+                    <div class="sidebar-header">
+                        <h3>Options</h3>
+                    </div>
+
+                    <ul class="list-unstyled components">
+                        <p>Hotels</p>
+                        <li class="">
+                            <a href="{% url 'SiteAdminDash' %}">Dashboard</a>
+                        </li>
+                        <li class="active">
+                            <a href="{% url 'HotelList' %}">View Hotels</a>
+                        </li>
+                        <li class="">
+                            <a href="{% url 'AirlinesList' %}">View Airlines</a>
+                        </li>
+                        <li class="">
+                            <a href="{% url 'HotelPaymentLog' %}">View Payment Log for Hotel Booking</a>
+                        </li>
+                        <li class="">
+                            <a href="{% url 'AirlinesPaymentLog' %}">View Payment Log for Flight Booking</a>
+                        </li>
+                        <li class="">
+                            <a href="{% url 'ApproveHotelBooking' %}">Approve Hotel Booking</a>
+                        </li>
+                        <li class="">
+                            <a href="{% url 'ApproveFlightBooking' %}">Approve Flight Booking</a>
+                        </li>
+                        <li class="">
+                            <a href="{% url 'Statistics' %}">View Stats</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+            <div class="col-lg-10" style="padding-right: 35px;padding-top:30px;">
+                <input type="text" id="hotelInput" onkeyup="searchTable()" placeholder="Search for name,address etc.."
+                       title="Type in a name,address,location.....">
+                <div class="rooms" style="margin-top: 20px;">
+                    <!-- Room -->
+                    <table id="hotelTable" width="100%">
+                        <tr align="center">
+                            <th onclick="sortTable(0,false)">
+                                Hotel Name
+                            </th>
+                            <th onclick="sortTable(1,false)">
+                                Hotel Country
+                            </th>
+                            <th onclick="sortTable(2,false)">
+                                Hotel Location
+                            </th>
+                            <th onclick="sortTable(3,false)" width="15%">
+                                Address
+                            </th>
+                            <th onclick="sortTable(4,true)">
+                                Longitude
+                            </th>
+                            <th onclick="sortTable(5,true)">
+                                Latitude
+                            </th>
+                            <th onclick="sortTable(6,false)" width="10%">
+                                Phone
+                            </th>
+                            <th onclick="sortTable(7,true)" width="10%">
+                                Percentage of Advance payment
+                            </th>
+                            <th onclick="sortTable(8,true)">
+                                Total Money Sent
+                            </th>
+                        </tr>
+                        {% for datum in data %}
+                        <tr align="center">
+                            <td>
+                                {{ datum.Hotel_Name }}
+                            </td>
+                            <td>
+                                {{ datum.Hotel_Country }}
+                            </td>
+                            <td>
+                                {{ datum.Hotel_Location }}
+                            </td>
+                            <td>
+                                {{ datum.Address }}
+                            </td>
+                            <td>
+                                {{ datum.Longitude }}
+                            </td>
+                            <td>
+                                {{ datum.Latitude }}
+                            </td>
+                            <td>
+                                {{ datum.Phone }}
+                            </td>
+                            <td>
+                                {{ datum.Percentage }}
+                            </td>
+                            <td>
+                                {{ datum.TotalSentMoney }}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock content %}
+
+{% block jscript %}
+<script>
+    function sortTable(col, isNumber) {
+        let table = document.getElementById("hotelTable");
+        let switching = true, shouldSwitch;
+        let asc = true, switchCount = 0, rows, i;
+        while (switching) {
+            switching = false;
+            rows = table.rows;
+            for (i = 1; i < (rows.length - 1); i++) {
+                shouldSwitch = false;
+                let x = rows[i].getElementsByTagName("TD")[col];
+                let y = rows[i + 1].getElementsByTagName("TD")[col];
+                if (asc) {
+                    if (isNumber) {
+                        console.log(Number(x.innerHTML));
+                        console.log(Number(y.innerHTML));
+                        if (Number(x.innerHTML) > Number(y.innerHTML)) {
+                            console.log(x.innerHTML);
+                            console.log(y.innerHTML);
+                            console.log(true);
+                            console.log('\n\n');
+                            shouldSwitch = true;
+                            break;
+                        }
+                    } else {
+                        if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                            shouldSwitch = true;
+                            break;
+                        }
+                    }
+                } else {
+                    if (isNumber) {
+                        if (Number(x.innerHTML) < Number(y.innerHTML)) {
+                            shouldSwitch = true;
+                            break;
+                        }
+                    } else {
+                        if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+                            shouldSwitch = true;
+                            break;
+                        }
+                    }
+                }
+            }
+            if (shouldSwitch) {
+                rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                switching = true;
+                switchCount++;
+            } else {
+                if (switchCount === 0 && asc) {
+                    asc = false;
+                    switching = true;
+                }
+            }
+        }
+    }
+
+    function searchTable() {
+        let colsToSearch = [0, 1, 2, 3];
+        let input = document.getElementById('hotelInput');
+        let filter = input.value.toUpperCase();
+        let table = document.getElementById('hotelTable');
+        let row = table.getElementsByTagName('tr');
+        for (let i = 0; i < row.length; i++) {
+            let data = [];
+            for (let j = 0; j < colsToSearch.length; j++) {
+                data.push(row[i].getElementsByTagName("td")[colsToSearch[j]]);
+            }
+            let isData = true;
+            for (let j = 0; j < data.length; j++) {
+                if (data[j] == null) {
+                    isData = false;
+                }
+            }
+            if (isData) {
+                let val = [];
+                for (let j = 0; j < data.length; j++) {
+                    val.push(data[j].textContent || data[j].innerText);
+                }
+                let displayFlag = false;
+                for (let j = 0; j < val.length; j++) {
+                    if (val[j].toUpperCase().indexOf(filter) > -1) {
+                        displayFlag = true;
+                    }
+                }
+                if (displayFlag) {
+                    row[i].style.display = "";
+                } else {
+                    row[i].style.display = "none";
+                }
+            }
+        }
+    }
+</script>
+{% endblock jscript %}

@@ -1,0 +1,315 @@
+{% extends "search/base.html" %}
+
+{% load static %}
+{% load url_replace %}
+{% load url_get %}
+{% load widget_tweaks %}
+
+
+{% block title %}Book flight at {{ aircompany.Airlines }}{% endblock title %}
+
+{% block css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'search/styles/bootstrap4/bootstrap.min.css' %}">
+    <link href="{% static 'search/plugins/font-awesome-4.7.0/css/font-awesome.min.css' %}" rel="stylesheet"
+          type="text/css">
+    <link rel="stylesheet" type="text/css" href="{% static 'search/styles/search.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'search/styles/single_listing_styles.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'search/styles/responsive.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'gijgo/js/gijgo.min.css' %}">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+{% endblock css %}
+
+{% block content %}
+
+    <div class="offers">
+        <div class="hero-image"
+             style="background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url({% static 'search/images/single_background.jpg' %})">
+            <div class="hero-text">
+                <h1 style="margin-top:150px">Confirm Booking</h1>
+            </div>
+        </div>
+        <div class="">
+            <div class="row">
+                <div class="col-lg-3" style="display: flex">
+                    <div class="search" style="align-items: stretch">
+                        <div class="search_inner">
+                            <!-- Search Contents -->
+
+                            <div class="container fill_height no-padding">
+                                <div class="row no-margin">
+                                    <div class="col  no-padding">
+                                        <!-- Search Tabs -->
+
+                                        <div class="search_tabs_container">
+                                            <div class="search_tabs d-flex flex-lg-row flex-column align-items-lg-center align-items-start justify-content-lg-between justify-content-start">
+                                                <div class="search_tab active d-flex flex-row align-items-center justify-content-lg-center justify-content-start">
+                                                    <img src="{% static 'search/images/suitcase.png' %}"
+                                                         alt=""><span>hotels</span>
+                                                </div>
+                                                <div class="search_tab d-flex flex-row align-items-center justify-content-lg-center justify-content-start">
+                                                    <img src="{% static 'search/images/departure.png' %}" alt="">flights
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                        <div class="search_panel active">
+                                            <form action="{% url 'searchHotelPage' %} " id="search_form_1" method="get"
+                                                  class="search_panel_content d-flex flex-lg-row flex-column align-items-lg-center align-items-start justify-content-lg-between justify-content-start">
+                                                <div class="search_item">
+                                                    <div>destination</div>
+                                                    {% render_field hotelform.hoteldest class="destination search_input" placeholder=hotelform.hoteldest.label value=request.GET.hoteldest %}
+                                                </div>
+                                                <div class="search_item">
+                                                    <div>check in</div>
+                                                    {% render_field hotelform.checkin class="check_in search_input" placeholder=hotelform.checkin.label %}
+                                                </div>
+                                                <div class="search_item">
+                                                    <div>check out</div>
+                                                    {% render_field hotelform.checkout class="check_out search_input" placeholder=hotelform.checkout.label %}
+                                                </div>
+                                                <div class="search_item">
+                                                    <div>room</div>
+                                                    {% render_field hotelform.room class="search_input room" placeholder=hotelform.room.label %}
+                                                </div>
+                                                <div class="search_item">
+                                                    <div>adults</div>
+                                                    {% render_field hotelform.adult class="search_input" placeholder=hotelform.adult.label %}
+                                                </div>
+                                                <button class="button search_button">
+                                                    search<span></span><span></span><span></span>
+                                                </button>
+                                                {% csrf_token %}
+                                            </form>
+                                        </div>
+
+
+                                        <!-- Search Panel -->
+
+                                        <div class="search_panel">
+                                            <form action="{% url 'searchFlightPage' %}" id="search_form_2"
+                                                  class="search_panel_content d-flex flex-lg-row flex-column align-items-lg-center align-items-start justify-content-lg-between justify-content-start">
+
+                                                <div class="search_item">
+                                                    <div>from</div>
+                                                    {% render_field flightform.source class="from search_input" placeholder=flightform.source.label %}
+                                                </div>
+                                                <div class="search_item">
+                                                    <div>to</div>
+                                                    {% render_field flightform.dest class="to search_input" placeholder=flightform.dest.label %}
+                                                </div>
+                                                <div class="search_item">
+                                                    <div>depart</div>
+                                                    {% render_field flightform.depart class="from search_input" placeholder=flightform.depart.label %}
+                                                </div>
+                                                <div class="search_item">
+                                                    <div>adults</div>
+                                                    {% render_field flightform.adult class="search_input" placeholder=flightform.adult.label %}
+                                                </div>
+                                                <div class="search_item">
+                                                    <div>children</div>
+                                                    {% render_field flightform.children class="search_input" placeholder=flightform.children.label %}
+                                                </div>
+                                                <button class="button search_button">
+                                                    search<span></span><span></span><span></span>
+                                                </button>
+                                                {% csrf_token %}
+                                            </form>
+                                        </div>
+
+
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-1"></div>
+                <div class="col-lg-8" style="margin-top:25px;margin-left:0px;">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="">
+                                    <div style="">
+                                        <!-- Title -->
+                                        <div class="hotel_title_container d-flex flex-lg-row flex-column">
+                                            <div class="hotel_title_content">
+                                                <h1 class="hotel_title">{{ aircompany.Airlines }}</h1>
+                                                <div class="rating_r rating_r_4 hotel_rating">
+                                                    <i></i>
+                                                    <i></i>
+                                                    <i></i>
+                                                    <i></i>
+                                                    <i></i>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Room-->
+                                        <div class="rooms">
+                                            <h3>Selected flight :</h3>
+                                            <hr>
+                                            <div class="room">
+                                                <div class="row no-margin no-padding">
+                                                    <div class="col-lg-3 no-padding no-margin">
+                                                        <div class="">
+                                                            {% with aircompany.uid|stringformat:"i" as ID %}
+                                                                `
+                                                                <img src="{% static 'media/user_'|add:ID|add:'/main/0.jpg' %}"
+                                                                     alt="" width="100%" height="20%">
+                                                            {% endwith %}
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-7">
+                                                        <div class="room_content">
+                                                            <div class="room_title"> Selected Flight: {{ flight.Plane }} </div>
+
+                                                            <div class="room_text">{{ flight.Src_Airport }}, {{ flight.Src }} To
+                                                               {{ flight.Dest_Airport }}, {{ flight.Dest }}</div>
+                                                            <div class="room_text"> Time: {{ flight.Time }}</div>
+                                                            <div class="room_text"> Date: {{ flight.Date }}</div>
+                                                            <div class="room_text"> Duration: {{ flight.Duration }} minutes</div>
+
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-2 text-lg-right">
+                                                        Price:<br/>
+                                                        <div class="offers_price">
+                                                            {{ flight.Price }}‎৳<br/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <hr>
+                                        </div>
+
+                                    {% if multi == 'True' %}
+                                        <div class="hotel_title_container d-flex flex-lg-row flex-column">
+                                            <div class="hotel_title_content">
+                                                <h1 class="hotel_title">{{ aircompany2.Airlines }}</h1>
+                                                <div class="rating_r rating_r_4 hotel_rating">
+                                                    <i></i>
+                                                    <i></i>
+                                                    <i></i>
+                                                    <i></i>
+                                                    <i></i>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Room-->
+                                        <div class="rooms">
+                                            <h3>Selected flight :</h3>
+                                            <hr>
+                                            <div class="room">
+                                                <div class="row no-margin no-padding">
+                                                    <div class="col-lg-3 no-padding no-margin">
+                                                        <div class="">
+                                                            {% with aircompany2.uid|stringformat:"i" as ID %}
+                                                                `
+                                                                <img src="{% static 'media/user_'|add:ID|add:'/main/0.jpg' %}"
+                                                                     alt="" width="100%" height="20%">
+                                                            {% endwith %}
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-7">
+                                                        <div class="room_content">
+                                                            <div class="room_title"> Selected Flight: {{ flight2.Plane }} </div>
+
+                                                            <div class="room_text">{{ flight2.Src_Airport }}, {{ flight2.Src }} To
+                                                               {{ flight2.Dest_Airport }}, {{ flight2.Dest }}</div>
+                                                            <div class="room_text"> Time: {{ flight2.Time }}</div>
+                                                            <div class="room_text"> Date: {{ flight2.Date }}</div>
+                                                            <div class="room_text"> Duration: {{ flight2.Duration }} minutes</div>
+
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-2 text-lg-right">
+                                                        Price:<br/>
+                                                        <div class="offers_price">
+                                                            {{ flight2.Price }}‎৳<br/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <hr>
+                                        </div>
+                                    {% endif %}
+
+                                        <div class="contact_form_container">
+                                            <div class="contact_title text-center">Confirm Booking</div>
+                                            <form action="flightbookingpayment?{{ request.GET.urlencode }}" id="booking_form_1" method="get" class="contact_form text-center">
+
+                                                <!--<input type="text" id="contact_form_name"
+                                                       class="contact_form_name input_field" placeholder="Name"
+                                                       required="required" data-error="Name is required.">-->
+                                                <div class="row">
+                                                    <div class="col-lg-6">
+                                                        <div class="contact_item">
+                                                            <div align="left">First name :</div>
+                                                            {% render_field form.first_name class="contact_form_name input_field" placeholder="Enter your first name" value=user.first_name %}
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-6">
+                                                        <div class="contact_item">
+                                                            <div align="left">Last name :</div>
+                                                            {% render_field form.last_name class="contact_form_name input_field" placeholder="Enter your last name" value=user.last_name %}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row" style="margin-top: 25px;">
+                                                    <div class="col-lg-12">
+                                                        <div class="contact_item">
+                                                            <div align="left">E-mail :</div>
+                                                            {% render_field form.email class="contact_form_email input_field" placeholder="E-mail" value=user.email %}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row" style="margin-top: 25px;">
+                                                    <div class="col-lg-12">
+                                                        <div class="contact_item">
+                                                            <div align="left">Phone no :</div>
+                                                            {% render_field form.phone class="contact_form_email input_field" placeholder="Phone no" value=user.Phone %}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row" style="margin-top: 25px;">
+                                                    <div class="col-lg-12">
+                                                        <div class="contact_item">
+                                                            <div align="left">Passport :</div>
+                                                            {% render_field form.passport class="contact_form_email input_field" placeholder="Passport no" value=user.Phone %}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                    <input type="hidden" name="source" value="{{ request.GET.source}}" />
+                                                    <input type="hidden" name="dest" value="{{ request.GET.dest}}" />
+                                                    <input type="hidden" name="depart" value="{{ request.GET.depart}}" />
+                                                    <input type="hidden" name="adult" value="{{ request.GET.adult}}" />
+                                                    <input type="hidden" name="FRID" value="{{ request.GET.FRID }}" />
+                                                    <input type="hidden" name="ID2" value="{{ request.GET.ID2}}" />
+                                                    <input type="hidden" name="ID1" value="{{ request.GET.ID1}}" />
+                                                    <input type="hidden" name="FIDS" value="{{ request.GET.FIDS }}" />
+                                                    <input type="hidden" name="FIDM1" value="{{ request.GET.FIDM1}}" />
+                                                    <input type="hidden" name="FIDM2" value="{{ request.GET.FIDM2}}" />
+                                                    <input type="hidden" name="uid" value="{{ user.id}}" />
+                                                <button type="submit" id="form_submit_button"
+                                                        class="form_submit_button button trans_200">Confirm booking
+                                                </button>
+                                                {% csrf_token %}
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}

@@ -1,0 +1,190 @@
+{% extends "search/base.html" %}
+
+{% load static %}
+{% load url_replace %}
+{% load url_get %}
+{% load widget_tweaks %}
+
+
+{% block title %}Bookings | {{ request.user }}{% endblock title %}
+
+{% block css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'search/styles/bootstrap4/bootstrap.min.css' %}">
+    <link href="{% static 'search/plugins/font-awesome-4.7.0/css/font-awesome.min.css' %}" rel="stylesheet"
+          type="text/css">
+    <link rel="stylesheet" type="text/css" href="{% static 'search/styles/search.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'search/styles/single_listing_styles.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'search/styles/responsive.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'gijgo/js/gijgo.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'adminpanel/sidebar.css' %}">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <style>
+        #roomstable {
+            font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        #roomstable td, #roomstable th {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+
+        #roomstable tr:nth-child(even) {
+            background: linear-gradient(to top right, #fcd49c, #bd99ff);
+        }
+
+        #roomstable tr:hover {
+            background: #50a6fb;
+        }
+
+        #roomstable th {
+            padding-top: 12px;
+            padding-bottom: 12px;
+            background-color: #350a4e;
+            color: white;
+        }
+    </style>
+
+{% endblock css %}
+
+{% block content %}
+
+    <div class="offers">
+
+        <div class="hero-image"
+             style="height:24.5%;background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url({% static 'search/images/single_background.jpg' %})">
+        </div>
+
+        <!-- Sidebar -->
+        <div class="">
+            <div class="row">
+                <div class="col-lg-2" style="display: flex">
+                    <nav id="sidebar">
+                        <div class="sidebar-header">
+                            <h3>Options</h3>
+                        </div>
+
+
+                        <ul class="list-unstyled components">
+                            <p>Payment Log for Flight Booking</p>
+                            <li class="active">
+                                <a href="{% url 'SiteAdminDash' %}">Dashboard</a>
+                            </li>
+                            <li class="">
+                                <a href="{% url 'HotelList' %}">View Hotels</a>
+                            </li>
+                            <li class="">
+                                <a href="{% url 'AirlinesList' %}">View Airlines</a>
+                            </li>
+                            <li class="">
+                                <a href="{% url 'HotelPaymentLog' %}">View Payment Log for Hotel Booking</a>
+                            </li>
+                            <li class="active">
+                                <a href="{% url 'AirlinesPaymentLog' %}">View Payment Log for Flight Booking</a>
+                            </li>
+                            <li class="">
+                                <a href="{% url 'ApproveHotelBooking' %}">Approve Hotel Booking</a>
+                            </li>
+
+                            <li class="">
+                                <a href="{% url 'ApproveFlightBooking' %}">Approve Flight Booking</a>
+                            </li>
+                            <li class="">
+                                <a href="{% url 'Statistics' %}">View Stats</a>
+                            </li>
+
+
+                        </ul>
+                    </nav>
+                </div>
+                <div class="col-lg-10" style="padding-right: 35px;">
+                    <div class="rooms" style="margin-top: 20px;">
+
+                        <!-- Room -->
+                        <table id="roomstable" width="100%">
+                            <tr align="center">
+                                <th width="13%">
+                                    Airlines
+                                </th>
+                                <th width="23%">
+                                    Flight details
+                                </th>
+                                <th width="23%">
+                                    Route details
+                                </th>
+                                <th width="3%">
+                                    Price
+                                </th>
+                                <th width="15%">
+                                   Pending Payment
+                                </th>
+                                <th width="15%">
+                                    Advanced Payment
+                                </th>
+                                <th width="15%">
+                                    Money to be refunded upon cancellation
+                                </th>
+
+                                <th width="15%">
+                                    Date of Booking
+                                </th>
+
+                                <th width="3%">
+                                    Total Seats Booked
+                                </th>
+
+                            </tr>
+                            {% for datum in data %}
+
+                                <tr align="center">
+                                    <td>
+                                        {{ datum.AirCompany_Name }}
+                                    </td>
+                                    <td>
+
+                                       Airplane number: {{ datum.Plane }} <br>
+                                       Airplane model: {{ datum.Model }} <br>
+                                        Date : {{ datum.DOF }}<br>
+                                        Time : {{ datum.Time }}<br>
+                                        Duration(in minutes) : {{ datum.Duration }}
+                                    </td>
+                                    <td>
+                                        {{ datum.SRC }}<br>
+                                        to<br>
+                                        {{ datum.DEST }}
+                                    </td>
+                                    <td>
+                                        {{ datum.Price }}
+                                    </td>
+                                    <td>
+                                        {{ datum.Pending }}
+                                    </td>
+                                    <td>
+                                        {{ datum.Paid }}
+                                    </td>
+                                     <td>
+                                         {{ datum.RefundedMoneyUponCancellation }}
+
+                                    </td>
+
+                                    <td>
+                                        {{ datum.DOB }}
+                                    </td>
+
+                                     <td>
+                                        {{ datum.TotalSeats }}
+                                    </td>
+
+                                </tr>
+                            {% endfor %}
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+
+{% endblock content %}

@@ -1,0 +1,121 @@
+{% extends "search/base.html" %}
+
+{% load static %}
+{% load url_replace %}
+{% load url_get %}
+{% load widget_tweaks %}
+
+
+{% block title %}Add Room | {{ request.user }}{% endblock title %}
+
+{% block css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'search/styles/bootstrap4/bootstrap.min.css' %}">
+    <link href="{% static 'search/plugins/font-awesome-4.7.0/css/font-awesome.min.css' %}" rel="stylesheet"
+          type="text/css">
+    <link rel="stylesheet" type="text/css" href="{% static 'search/styles/search.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'search/styles/single_listing_styles.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'search/styles/responsive.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'gijgo/js/gijgo.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'adminpanel/sidebar.css' %}">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+{% endblock css %}
+
+{% block content %}
+
+    <div class="offers">
+
+        <div class="hero-image"
+             style="height:24.5%;background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url({% static 'search/images/single_background.jpg' %})">
+        </div>
+
+        <!-- Sidebar -->
+        <div class="">
+            <div class="row">
+                <div class="col-lg-2" style="display: flex">
+                    <nav id="sidebar">
+                        <div class="sidebar-header">
+                            <h3>Options</h3>
+                        </div>
+                        <ul class="list-unstyled components">
+                            <p>Dashboard</p>
+                            <li class="">
+                                <a href="{% url 'airlinesAdminDash' %}">Dashboard</a>
+                            </li>
+                            <li class="">
+                                <a href="">Update Airlines Information</a>
+                            </li>
+                            <li class="">
+                                <a href="{% url 'airlinesAdminAddRoute' %}">Add Route</a>
+                            </li>
+                            <li>
+                                <a href="">Add Flight</a>
+                            </li>
+                            <li>
+                                <a href="">Add Flight to a route</a>
+                            </li>
+                            <li>
+                                <a href="{% url 'airlinesAdminUpdateSeats' %}">Update available seats in a flight</a>
+                            </li>
+                            <li class="">
+                                <a href="">Update Flight Information</a>
+                            </li>
+                            <li>
+                                <a href="">View Bookings</a>
+                            </li>
+                            <li>
+                                <a href="">Calender</a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+                <div class="col-lg-1"></div>
+                <div class="col-lg-8" style="padding-top: 25px;">
+
+
+
+                    <div class="contact_form_container text-center">
+                        <div class="contact_title text-center">
+                            Update Seats
+                        </div>
+                        <form method="POST" id="contact_form" class="contact_form" enctype="multipart/form-data" onchange="submitform();">
+
+
+                            <div class="row" style="margin-top: 25px;">
+                                <div class="col-lg-12">
+                                    <div class="contact_item">
+                                        <div align="left">Select Flight :</div>
+                                        {% render_field form.Flight class="contact_form_email input_field" %}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row" style="margin-top: 25px;">
+                                <div class="col-lg-12">
+                                    <div class="contact_item">
+                                        <div align="left">Total Seats :</div>
+                                        {% render_field form.TotalSeats class="contact_form_email input_field" %}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button type="submit" id="form_submit_button"
+                                    class="form_submit_button button trans_200">Update Seats
+                            </button>
+                            {% csrf_token %}
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}
+{% block jscript %}
+<script type="text/javascript">
+function submitform()
+{
+  document.myform.submit();
+}
+</script>
+{% endblock jscript %}

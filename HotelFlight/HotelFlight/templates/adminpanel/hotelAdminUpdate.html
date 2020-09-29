@@ -1,0 +1,159 @@
+{% extends "search/base.html" %}
+
+{% load static %}
+{% load url_replace %}
+{% load url_get %}
+{% load widget_tweaks %}
+
+
+{% block title %}Update Hotel | {{ request.user }} {% endblock title %}
+
+{% block css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'search/styles/bootstrap4/bootstrap.min.css' %}">
+    <link href="{% static 'search/plugins/font-awesome-4.7.0/css/font-awesome.min.css' %}" rel="stylesheet"
+          type="text/css">
+    <link rel="stylesheet" type="text/css" href="{% static 'search/styles/search.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'search/styles/single_listing_styles.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'search/styles/responsive.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'gijgo/js/gijgo.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'adminpanel/sidebar.css' %}">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+{% endblock css %}
+
+{% block content %}
+
+    <div class="offers">
+
+        <div class="hero-image"
+             style="height:24.5%;background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url({% static 'search/images/single_background.jpg' %})">
+        </div>
+
+        <!-- Sidebar -->
+        <div class="">
+            <div class="row">
+                <div class="col-lg-2" style="display: flex">
+                    <nav id="sidebar">
+                        <div class="sidebar-header">
+                            <h3>Options</h3>
+                        </div>
+
+                        <ul class="list-unstyled components">
+                            <p>Update Hotel</p>
+                            <li>
+                                <a href="{% url 'hotelAdminDash' %}">Dashboard</a>
+                            </li>
+                            <li>
+                                <a href="{% url 'hotelAdminNotifications' %}">Notifications</a>
+                            </li>
+                            <li class="active">
+                                <a href="{% url 'hotelAdminUpdate' %}">Update Hotel</a>
+                            </li>
+                            <li>
+                                <a href="{% url 'hotelAdminRooms' %}">View Rooms</a>
+                            </li>
+                            <li>
+                                <a href="{% url 'hotelAdminAddRoom' %}">Add Rooms</a>
+                            </li>
+                            <li>
+                                <a href="{% url 'hotelAdminBookingsToday' %}">Today's Bookings</a>
+                            </li>
+                            <li>
+                                <a href="{% url 'hotelAdminBookings' %}">View Bookings</a>
+                            </li>
+                            <li>
+                                <a href="{% url 'hotelAdminCalender' %}">Calender</a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+                <div class="col-lg-9">
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <div style="padding: 10px;">
+                                {% with request.user.id|stringformat:"i" as ID %}
+                                    <img src="{% static 'media/user_'|add:ID|add:'/main/0.jpg' %}" alt="" height="300px"
+                                         width="300px">
+                                {% endwith %}
+                            </div>
+                        </div>
+                        <div class="col-lg-8" style="padding-top: 25px;">
+                            <b>Name</b>:{{ hotel.Hotel_Name }}
+                            <hr>
+                            <b>Phone</b>:{{ hotel.Phone }}
+                            <hr>
+                            <b>Address</b>:{{ hotel.Address }}
+                            <hr>
+                            <b>City</b>:{{ hotel.Hotel_Location }}
+                            <hr>
+                            <b>Country</b>:{{ hotel.Hotel_Country }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12" style="padding: 10px;padding-left: 23px; ">
+                            <div class="contact_form_container">
+                                <div class="contact_title text-center">
+                                    Update information
+                                    {% for message in messages %}
+                                        <div {% if message.extra_tags %} class="alert {{ message.extra_tags }}"{% endif %}>
+                                            <a class="close" href="" {% if message.extra_tags %} data-dismiss="{{ message.extra_tags }}"{% endif %}>×</a>
+                                            {{ message }}
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                                <form method="POST" id="contact_form" class="contact_form text-center">
+                                    <div class="row" style="margin-top: 25px;">
+                                        <div class="col-lg-12">
+                                            <div class="contact_item">
+                                                <div align="left">Hotel name :</div>
+                                                {% render_field form.name class="contact_form_email input_field" placeholder="Hotel name" value=hotel.Hotel_Name %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row" style="margin-top: 25px;">
+                                        <div class="col-lg-12">
+                                            <div class="contact_item">
+                                                <div align="left">Phone :</div>
+                                                {% render_field form.phone class="contact_form_email input_field" placeholder="Phone" value=hotel.Phone %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row" style="margin-top: 25px;">
+                                        <div class="col-lg-12">
+                                            <div class="contact_item">
+                                                <div align="left">Address :</div>
+                                                {% render_field form.address class="contact_form_email input_field" placeholder="Phone" value=hotel.Address %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row" style="margin-top: 25px;">
+                                        <div class="col-lg-12">
+                                            <div class="contact_item">
+                                                <div align="left">City :</div>
+                                                {% render_field form.location class="contact_form_email input_field" placeholder="Phone" value=hotel.Hotel_Location %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row" style="margin-top: 25px;">
+                                        <div class="col-lg-12">
+                                            <div class="contact_item">
+                                                <div align="left">Country :</div>
+                                                {% render_field form.country class="contact_form_email input_field" placeholder="Phone" value=hotel.Hotel_Country %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <button type="submit" id="form_submit_button"
+                                            class="form_submit_button button trans_200">Update
+                                    </button>
+                                    {% csrf_token %}
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}

@@ -1,0 +1,262 @@
+{% extends "search/base.html" %}
+
+{% load static %}
+{% load url_replace %}
+{% load url_get %}
+{% load widget_tweaks %}
+
+
+{% block title %}Update Room | {{ request.user }}{% endblock title %}
+
+{% block css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'search/styles/bootstrap4/bootstrap.min.css' %}">
+    <link href="{% static 'search/plugins/font-awesome-4.7.0/css/font-awesome.min.css' %}" rel="stylesheet"
+          type="text/css">
+    <link rel="stylesheet" type="text/css" href="{% static 'search/styles/search.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'search/styles/single_listing_styles.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'search/styles/responsive.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'gijgo/js/gijgo.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'adminpanel/sidebar.css' %}">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+{% endblock css %}
+
+{% block content %}
+
+    <div class="offers">
+
+        <div class="hero-image"
+             style="height:24.5%;background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url({% static 'search/images/single_background.jpg' %})">
+        </div>
+
+        <!-- Sidebar -->
+        <div class="">
+            <div class="row">
+                <div class="col-lg-2" style="display: flex">
+                    <nav id="sidebar">
+                        <div class="sidebar-header">
+                            <h3>Options</h3>
+                        </div>
+
+                        <ul class="list-unstyled components">
+                            <p>Update Room</p>
+                            <li>
+                                <a href="{% url 'hotelAdminDash' %}">Dashboard</a>
+                            </li>
+                            <li>
+                                <a href="{% url 'hotelAdminNotifications' %}">Notifications</a>
+                            </li>
+                            <li class="">
+                                <a href="{% url 'hotelAdminUpdate' %}">Update Hotel</a>
+                            </li>
+                            <li class="active">
+                                <a href="{% url 'hotelAdminRooms' %}">View Rooms</a>
+                            </li>
+                            <li>
+                                <a href="{% url 'hotelAdminAddRoom' %}">Add Room</a>
+                            </li>
+                            <li>
+                                <a href="{% url 'hotelAdminBookingsToday' %}">Today's Bookings</a>
+                            </li>
+                            <li>
+                                <a href="{% url 'hotelAdminBookings' %}">View Bookings</a>
+                            </li>
+                            <li>
+                                <a href="{% url 'hotelAdminCalender' %}">Calender</a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+                <div class="col-lg-1"></div>
+                <div class="col-lg-8">
+                    <!-- Container for the image gallery -->
+                    {% if request.GET.msg == 'S' %}
+                        <div class="alert-success alert" align="center" style="font-weight: bold;font-size: 20px;">
+                            Room added successfully.<br>You can modify the room below.
+                        </div>
+                    {% elif request.GET.msg == 'F' %}
+                        <div class="alert-danger alert" align="center" style="font-weight: bold;font-size: 20px;">
+                            Room already exists.<br>You can modify the room below.
+                        </div>
+                    {% endif %}
+                    <div class="container">
+                        <!-- Full-width images with number text -->
+                        {% for image in imagelist %}
+                            <div class="mySlides">
+                                <div class="numbertext">{{ forloop.counter }}/ {{ count }}</div>
+                                <div class="deleteicon">
+                                    <a href="{% url 'hotelAdminRoomSingle' %}?{{ request.GET.urlencode }}&img={{ image }}"
+                                       title="Delete this image">
+                                        <img src="{% static 'media/delete.png' %}" width="50px" height=" 50px"/>
+                                    </a>
+                                </div>
+                                {% with request.user.id|stringformat:"i" as ID and request.GET.roomID as rID %}
+                                    <img src="{% static 'media/user_'|add:ID|add:'/room_'|add:rID|add:'/'|add:image %}"
+                                         alt="" width="100%" height="380px" style="width: 100%;">
+                                {% endwith %}
+                            </div>
+                        {% endfor %}
+
+                        <!-- Next and previous buttons -->
+                        <a class="prev" style="color: #fff;" onclick="plusSlides(-1)">&#10094;</a>
+                        <a class="next" style="color: #fff;" onclick="plusSlides(1)">&#10095;</a>
+
+                        <!-- Image text -->
+                        <div class="caption-container">
+                            <p id="caption"></p>
+                        </div>
+
+                        <!-- Remove image -->
+
+
+                        <!-- Thumbnail images -->
+                        <div class="row" style="display: table;margin-left:0px;margin-right: 0px;">
+                            {% for image in imagelist %}
+                                <div class="column" style="display: table-cell;">
+                                    {% with request.user.id|stringformat:"i" as ID and request.GET.roomID as rID %}
+                                        <img src="{% static 'media/user_'|add:ID|add:'/room_'|add:rID|add:'/'|add:image %}"
+                                             alt="{{ image }}" style="width: 100%;height: 150px;" class="demo cursor"
+                                             onclick="currentSlide({{ forloop.counter }})">
+                                    {% endwith %}
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div align="center" style="font-size: 19px;font-weight: bold;margin-top:20px;">
+                        {% for message in messages %}
+                            <div {% if message.extra_tags %}
+                                class="alert {{ message.extra_tags }}"{% endif %}>
+                                <a class="close" href="" {% if message.extra_tags %}
+                                   data-dismiss="{{ message.extra_tags }}"{% endif %}>×</a>
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6" style="padding: 10px;padding-left: 23px; ">
+                            <div class="contact_form_container">
+                                <div class="contact_title text-center">
+                                    Update Room information
+                                </div>
+                                <form method="POST" id="contact_form" class="contact_form">
+                                    <div class="row" style="margin-top: 25px;">
+                                        <div class="col-lg-12">
+                                            <div class="contact_item">
+                                                <div align="left">Type :</div>
+                                                {{ roomtype }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row" style="margin-top: 25px;">
+                                        <div class="col-lg-12">
+                                            <div class="contact_item">
+                                                <div align="left">Wifi :</div>
+                                                {% render_field updateRoomForm.wifi class="contact_form_email input_field" style="color:black;" %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row" style="margin-top: 25px;">
+                                        <div class="col-lg-12">
+                                            <div class="contact_item">
+                                                <div align="left">Complimentary breakfast :</div>
+                                                {% render_field updateRoomForm.breakfast class="contact_form_email input_field" style="color:black;" %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row" style="margin-top: 25px;">
+                                        <div class="col-lg-12">
+                                            <div class="contact_item">
+                                                <div align="left">Total number of rooms :</div>
+                                                {% render_field updateRoomForm.roomCount class="contact_form_email input_field" value=room.TotalRoomCount %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row" style="margin-top: 25px;">
+                                        <div class="col-lg-12">
+                                            <div class="contact_item">
+                                                <div align="left">Price :</div>
+                                                {% render_field updateRoomForm.price class="contact_form_email input_field" value=room.Price %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <button type="submit" id="form_submit_button"
+                                            class="form_submit_button button trans_200">Update
+                                    </button>
+                                    {% csrf_token %}
+                                </form>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6" style="padding: 10px;padding-left: 23px; ">
+                            <div class="contact_form_container" style="min-height: 127.3vh;">
+                                <div class="contact_title text-center">
+                                    Add images
+                                </div>
+                                <div>
+                                    <form method="post" enctype="multipart/form-data">
+                                        {% csrf_token %}
+                                        <div class="row" style="margin-top: 25px;">
+                                            <div class="col-lg-12">
+                                                <div class="contact_item">
+                                                    <div align="left">Select files :</div>
+                                                    {% render_field imageform.file class="contact_form_email input_field" %}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {% render_field imageform.roomid class="destination search_input" value=request.GET.roomID type="hidden" %}
+                                        {% render_field imageform.userid class="destination search_input" value=request.user.id type="hidden" %}
+
+                                        <button type="submit" class="form_submit_button button trans_200">Upload
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}
+
+{% block jscript %}
+    <script>
+        var slideIndex = 1;
+        showSlides(slideIndex);
+
+        // Next/previous controls
+        function plusSlides(n) {
+            showSlides(slideIndex += n);
+        }
+
+        // Thumbnail image controls
+        function currentSlide(n) {
+            showSlides(slideIndex = n);
+        }
+
+        function showSlides(n) {
+            var i;
+            var slides = document.getElementsByClassName("mySlides");
+            var dots = document.getElementsByClassName("demo");
+            var captionText = document.getElementById("caption");
+            if (n > slides.length) {
+                slideIndex = 1
+            }
+            if (n < 1) {
+                slideIndex = slides.length
+            }
+            for (i = 0; i < slides.length; i++) {
+                slides[i].style.display = "none";
+            }
+            for (i = 0; i < dots.length; i++) {
+                dots[i].className = dots[i].className.replace(" active", "");
+            }
+            slides[slideIndex - 1].style.display = "block";
+            dots[slideIndex - 1].className += " active";
+            captionText.innerHTML = dots[slideIndex - 1].alt;
+        }
+    </script>
+{% endblock jscript %}

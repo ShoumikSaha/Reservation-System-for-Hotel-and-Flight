@@ -1,0 +1,265 @@
+{% extends "search/base.html" %}
+
+{% load static %}
+
+{% load widget_tweaks %}
+
+
+{% block title %}Homepage{% endblock title %}
+
+
+{% block content %}
+
+<div class="home">
+
+    <!-- Home Slider -->
+
+    <div class="home_slider_container">
+
+        <div class="owl-carousel owl-theme home_slider">
+
+            <!-- Slider Item -->
+            <div class="owl-item home_slider_item">
+                <!-- Image by https://unsplash.com/@anikindimitry -->
+                <div class="home_slider_background"
+                     style="background-image: url({% static 'search/images/home_slider.jpg' %})"></div>
+
+                <div class="home_slider_content text-center">
+                    <div class="home_slider_content_inner" data-animation-in="flipInX"
+                         data-animation-out="animate-out fadeOut">
+                        <h1>discover</h1>
+                        <h1>the world</h1>
+                        <div class="button home_slider_button">
+                            <div class="button_bcg"></div>
+                            <a href="#">explore now<span></span><span></span><span></span></a></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slider Item -->
+            <div class="owl-item home_slider_item">
+                <div class="home_slider_background"
+                     style="background-image:url({% static 'search/images/home_slider.jpg' %})"></div>
+
+                <div class="home_slider_content text-center">
+                    <div class="home_slider_content_inner" data-animation-in="flipInX"
+                         data-animation-out="animate-out fadeOut">
+                        <h1>discover</h1>
+                        <h1>the world</h1>
+                        <div class="button home_slider_button">
+                            <div class="button_bcg"></div>
+                            <a href="#">explore now<span></span><span></span><span></span></a></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slider Item -->
+            <div class="owl-item home_slider_item">
+                <div class="home_slider_background"
+                     style="background-image:url({% static 'search/images/home_slider.jpg' %})"></div>
+
+                <div class="home_slider_content text-center">
+                    <div class="home_slider_content_inner" data-animation-in="flipInX"
+                         data-animation-out="animate-out fadeOut">
+                        <h1>discover</h1>
+                        <h1>the world</h1>
+                        <div class="button home_slider_button">
+                            <div class="button_bcg"></div>
+                            <a href="#">explore now<span></span><span></span><span></span></a></div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Home Slider Nav - Prev -->
+        <div class="home_slider_nav home_slider_prev">
+            <svg version="1.1" id="Layer_2" xmlns="http://www.w3.org/2000/svg"
+                 xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                 width="28px" height="33px" viewBox="0 0 28 33" enable-background="new 0 0 28 33" xml:space="preserve">
+					<defs>
+						<linearGradient id='home_grad_prev'>
+							<stop offset='0%' stop-color='#fa9e1b'/>
+                            <stop offset='100%' stop-color='#8d4fff'/>
+						</linearGradient>
+					</defs>
+                <path class="nav_path" fill="#F3F6F9" d="M19,0H9C4.029,0,0,4.029,0,9v15c0,4.971,4.029,9,9,9h10c4.97,0,9-4.029,9-9V9C28,4.029,23.97,0,19,0z
+					M26,23.091C26,27.459,22.545,31,18.285,31H9.714C5.454,31,2,27.459,2,23.091V9.909C2,5.541,5.454,2,9.714,2h8.571
+					C22.545,2,26,5.541,26,9.909V23.091z"/>
+                <polygon class="nav_arrow" fill="#F3F6F9" points="15.044,22.222 16.377,20.888 12.374,16.885 16.377,12.882 15.044,11.55 9.708,16.885 11.04,18.219
+					11.042,18.219 "/>
+				</svg>
+        </div>
+
+        <!-- Home Slider Nav - Next -->
+        <div class="home_slider_nav home_slider_next">
+            <svg version="1.1" id="Layer_3" xmlns="http://www.w3.org/2000/svg"
+                 xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                 width="28px" height="33px" viewBox="0 0 28 33" enable-background="new 0 0 28 33" xml:space="preserve">
+					<defs>
+						<linearGradient id='home_grad_next'>
+							<stop offset='0%' stop-color='#fa9e1b'/>
+                            <stop offset='100%' stop-color='#8d4fff'/>
+						</linearGradient>
+					</defs>
+                <path class="nav_path" fill="#F3F6F9" d="M19,0H9C4.029,0,0,4.029,0,9v15c0,4.971,4.029,9,9,9h10c4.97,0,9-4.029,9-9V9C28,4.029,23.97,0,19,0z
+				M26,23.091C26,27.459,22.545,31,18.285,31H9.714C5.454,31,2,27.459,2,23.091V9.909C2,5.541,5.454,2,9.714,2h8.571
+				C22.545,2,26,5.541,26,9.909V23.091z"/>
+                <polygon class="nav_arrow" fill="#F3F6F9" points="13.044,11.551 11.71,12.885 15.714,16.888 11.71,20.891 13.044,22.224 18.379,16.888 17.048,15.554
+				17.046,15.554 "/>
+				</svg>
+        </div>
+
+        <!-- Home Slider Dots -->
+
+        <div class="home_slider_dots">
+            <ul id="home_slider_custom_dots" class="home_slider_custom_dots">
+                <li class="home_slider_custom_dot active">
+                    <div></div>
+                    01.
+                </li>
+                <li class="home_slider_custom_dot">
+                    <div></div>
+                    02.
+                </li>
+                <li class="home_slider_custom_dot">
+                    <div></div>
+                    03.
+                </li>
+            </ul>
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- Search -->
+
+<div class="search">
+
+
+    <!-- Search Contents -->
+
+    <div class="container fill_height">
+        <div class="row fill_height">
+            <div class="col fill_height">
+
+                <!-- Search Tabs -->
+
+                <div class="search_tabs_container">
+                    <div class="search_tabs d-flex flex-lg-row flex-column align-items-lg-center align-items-start justify-content-lg-between justify-content-start">
+                        <div class="search_tab active d-flex flex-row align-items-center justify-content-lg-center justify-content-start">
+                            <img src="{% static 'search/images/suitcase.png' %}" alt=""><span>hotels</span></div>
+                        <div class="search_tab d-flex flex-row align-items-center justify-content-lg-center justify-content-start">
+                            <img src="{% static 'search/images/departure.png' %}" alt="">flights
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Search Panel -->
+
+                <div class="search_panel active">
+                    <form action="{% url 'searchHotelPage' %}" id="search_form_1" method="get"
+                          class="search_panel_content d-flex flex-lg-row flex-column align-items-lg-center align-items-start justify-content-lg-between justify-content-start">
+
+                        <div class="search_item">
+                            <div>destination</div>
+                            {% render_field hotelForm.hoteldest class="destination search_input" placeholder=hotelForm.hoteldest.label %}
+                            <!-- <input type="text" class="destination search_input" required="required"> -->
+                        </div>
+                        <div class="search_item" style="margin-top: 12px">
+                            <div>check in</div>
+                            {% render_field hotelForm.checkin class="check_in search_input" placeholder=hotelForm.checkin.label %}
+                            <!-- <input type="text" class="check_in search_input" placeholder="YYYY-MM-DD"> -->
+                        </div>
+                        <div class="search_item" style="margin-top: 12px">
+                            <div>check out</div>
+                            {% render_field hotelForm.checkout class="check_out search_input" placeholder=hotelForm.checkin.label %}
+                            <!-- <input type="text" class="check_out search_input" placeholder="YYYY-MM-DD">-->
+                        </div>
+                        <div class="search_item">
+                            <div>room</div>
+                            {% render_field hotelForm.room class="search_input" placeholder=hotelForm.room.label %}
+                        </div>
+                        <div class="search_item">
+                            <div>adults</div>
+                            {% render_field hotelForm.adult class="search_input" placeholder=hotelForm.adult.label %}
+                        </div>
+                        <!--<div class="search_item">
+                            <div>children</div>
+                            {% render_field hotelForm.children class="search_input" placeholder=hotelForm.children.label %}
+                        </div>-->
+                        <button class="button search_button">search<span></span><span></span><span></span></button>
+                        {% csrf_token %}
+                    </form>
+                </div>
+
+                <!-- Search Panel -->
+
+                <div class="search_panel">
+                    <form action="{% url 'searchFlightPage' %}" id="search_form_2" method="get"
+                          class="search_panel_content d-flex flex-lg-row flex-column align-items-lg-center align-items-start justify-content-lg-between justify-content-start">
+                        <div class="search_item" style="width: 21.453%;">
+                            <div>from</div>
+                             {% render_field flightForm.source class="from search_input" placeholder=flightForm.source.label %}
+                        </div>
+                        <div class="search_item" style="width: 21.453%;">
+                            <div>to</div>
+                            {% render_field flightForm.dest class="to search_input" placeholder=flightForm.dest.label %}
+                        </div>
+                        <div class="search_item">
+                            <div>depart</div>
+                            {% render_field flightForm.depart class="from search_input" placeholder=flightForm.depart.label %}
+                        </div>
+                        <div class="search_item">
+                            <div>adults</div>
+                            {% render_field flightForm.adult class="search_input" placeholder=flightForm.adult.label %}
+                        </div>
+                        <div class="search_item">
+                            <div>children</div>
+                            {% render_field flightForm.children class="search_input" placeholder=flightForm.children.label %}
+                        </div>
+                        <button class="button search_button">search<span></span><span></span><span></span></button>
+                         {% csrf_token %}
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
+
+
+{% block jscript %}
+<script>
+    let jsTomorrow = new Date();
+    jsTomorrow.setDate(new Date().getDate()+1);
+    let today = new Date().getFullYear() + "-" + ("0" + (new Date().getMonth() + 1)).slice(-2) + "-" +
+            ("0" + new Date().getDate()).slice(-2);
+    let tomorrow = jsTomorrow.getFullYear() + "-" + ("0" + (jsTomorrow.getMonth() + 1)).slice(-2) + "-" +
+            ("0" + jsTomorrow.getDate()).slice(-2);
+    $('#id_checkin').datepicker({
+        uiLibrary: 'bootstrap4',
+        value: today,
+        minDate: today,
+        format: 'yyyy-mm-dd',
+        size: 'small'
+    });
+    $('#id_checkout').datepicker({
+        uiLibrary: 'bootstrap4',
+        value: tomorrow,
+        minDate: tomorrow,
+        format: 'yyyy-mm-dd',
+        size: 'small'
+    });
+     $('#id_depart').datepicker({
+        uiLibrary: 'bootstrap4',
+        value: today,
+        minDate: today,
+        format: 'yyyy-mm-dd',
+        size: 'small'
+    });
+</script>
+{% endblock jscript %}

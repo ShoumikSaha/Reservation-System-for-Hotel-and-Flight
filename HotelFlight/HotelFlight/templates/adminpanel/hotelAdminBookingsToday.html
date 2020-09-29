@@ -1,0 +1,219 @@
+{% extends "search/base.html" %}
+
+{% load static %}
+{% load url_replace %}
+{% load url_get %}
+{% load widget_tweaks %}
+
+
+{% block title %}Bookings | {{ request.user }}{% endblock title %}
+
+{% block css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'search/styles/bootstrap4/bootstrap.min.css' %}">
+    <link href="{% static 'search/plugins/font-awesome-4.7.0/css/font-awesome.min.css' %}" rel="stylesheet"
+          type="text/css">
+    <link rel="stylesheet" type="text/css" href="{% static 'search/styles/search.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'search/styles/single_listing_styles.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'search/styles/responsive.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'gijgo/js/gijgo.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'adminpanel/sidebar.css' %}">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <style>
+        #roomstable {
+            font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        #roomstable td, #roomstable th {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+
+        #roomstable tr:nth-child(even) {
+            background: linear-gradient(to top right, #fcd49c, #bd99ff);
+        }
+
+        #roomstable tr:hover {
+            background: #50a6fb;
+        }
+
+        #roomstable th {
+            padding-top: 12px;
+            padding-bottom: 12px;
+            background-color: #350a4e;
+            color: white;
+        }
+    </style>
+
+{% endblock css %}
+
+{% block content %}
+
+    <div class="offers">
+
+        <div class="hero-image"
+             style="height:24.5%;background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url({% static 'search/images/single_background.jpg' %})">
+        </div>
+
+        <!-- Sidebar -->
+        <div class="">
+            <div class="row">
+                <div class="col-lg-2" style="display: flex">
+                    <nav id="sidebar">
+                        <div class="sidebar-header">
+                            <h3>Options</h3>
+                        </div>
+
+                        <ul class="list-unstyled components">
+                            <p>Bookings</p>
+                            <li>
+                                <a href="{% url 'hotelAdminDash' %}">Dashboard</a>
+                            </li>
+                            <li>
+                                <a href="{% url 'hotelAdminNotifications' %}">Notifications</a>
+                            </li>
+                            <li>
+                                <a href="{% url 'hotelAdminUpdate' %}">Update Hotel</a>
+                            </li>
+                            <li>
+                                <a href="{% url 'hotelAdminRooms' %}">View Rooms</a>
+                            </li>
+                            <li>
+                                <a href="{% url 'hotelAdminAddRoom' %}">Add Rooms</a>
+                            </li>
+                            <li class="active">
+                                <a href="{% url 'hotelAdminBookingsToday' %}">Today's Bookings</a>
+                            </li>
+                            <li>
+                                <a href="{% url 'hotelAdminBookings' %}">View Bookings</a>
+                            </li>
+                            <li>
+                                <a href="{% url 'hotelAdminCalender' %}">Calender</a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+                <div class="col-lg-10" style="padding-right: 35px;">
+
+                    <form action="{% url 'hotelAdminBookingsToday' %}">
+                        <input id="datep" name="date" width="250">
+                        <button>Submit</button>
+                    </form>
+
+
+                    <div class="rooms" style="margin-top: 20px;">
+
+                        <!-- Room -->
+                        <table id="roomstable" width="100%">
+                            <tr align="center">
+                                <th width="15%">
+                                    Booked by
+                                </th>
+                                <th width="15%">
+                                    Room Details
+                                </th>
+                                <th width="15%">
+                                    Check-in
+                                </th>
+                                <th width="15%">
+                                    Check-out
+                                </th>
+                                <th>
+                                    No of Rooms
+                                </th>
+                                <th>
+                                    Price
+                                </th>
+                                <th width="13%">
+                                    Advanced Payment
+                                </th>
+                                <th width="13%">
+                                    Pending Payment
+                                </th>
+                                <th>
+                                    Status
+                                </th>
+                                <th>
+                                    Actions
+                                </th>
+                            </tr>
+                            {% for datum in data %}
+                                <tr align="center">
+                                    <td>
+                                        {{ datum.first_name }} {{ datum.last_name }}<br>
+                                        {{ datum.Phone }}<br>
+                                        {{ datum.Address }}<br>
+                                        {{ datum.email }}
+                                    </td>
+                                    <td>
+                                        ID : {{ datum.Room_id }}<br>
+                                        {{ datum.RoomType }}<br>
+                                        Single Bed : {{ datum.SingleBedCount }}<br>
+                                        Double Bed : {{ datum.DoubleBedCount }}
+                                    </td>
+                                    <td>
+                                        {{ datum.Checkin_Date }}
+                                    </td>
+                                    <td>
+                                        {{ datum.Checkout_Date }}
+                                    </td>
+                                    <td>
+                                        {{ datum.TotalRooms }}
+                                    </td>
+                                    <td>
+                                        {{ datum.Price }}
+                                    </td>
+                                    <td>
+                                        {{ datum.PaidMoney }}৳
+                                    </td>
+                                    <td>
+                                        {{ datum.MoneyToPay }}৳
+                                    </td>
+                                    <td>
+                                        {% with datum.Status as status %}
+                                            {% if status == 0 %}
+                                                Booked
+                                            {% elif status == 1 %}
+                                                Confirmed
+                                            {% else %}
+                                                Cancelled
+                                            {% endif %}
+                                        {% endwith %}
+                                    </td>
+                                    <td>
+                                        <select onchange="this.options[this.selectedIndex].value && (window.location = this.options[this.selectedIndex].value);">
+                                            <option value="">Select...</option>
+                                            <option value="{% url 'hotelAdminBookingConfirm' %}?bid={{ datum.Bid }}">
+                                                Confirm
+                                            </option>
+                                            <option value="{% url 'hotelAdminBookingCancel' %}?bid={{ datum.Bid }}">
+                                                Cancel
+                                            </option>
+                                        </select>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}
+
+{% block jscript %}
+    <script>
+        let today = new Date().getFullYear() + "-" + ("0" + (new Date().getMonth() + 1)).slice(-2) + "-" +
+            ("0" + new Date().getDate()).slice(-2);
+        let dp = $('#datep').datepicker({
+            uiLibrary: 'bootstrap4',
+            value: today,
+            minDate: today,
+            format: 'yyyy-mm-dd',
+            size: 'small'
+        });
+    </script>
+{% endblock %}

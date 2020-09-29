@@ -1,0 +1,80 @@
+{% extends "search/base.html" %}
+
+{% load static %}
+{% load url_replace %}
+{% load url_get %}
+{% load widget_tweaks %}
+
+
+{% block title %}Dashboard | {{ request.user }}{% endblock title %}
+
+{% block css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'search/styles/bootstrap4/bootstrap.min.css' %}">
+    <link href="{% static 'search/plugins/font-awesome-4.7.0/css/font-awesome.min.css' %}" rel="stylesheet"
+          type="text/css">
+    <link rel="stylesheet" type="text/css" href="{% static 'search/styles/search.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'search/styles/single_listing_styles.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'search/styles/responsive.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'gijgo/js/gijgo.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'adminpanel/sidebar.css' %}">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+{% endblock css %}
+
+{% block content %}
+
+    <div class="offers">
+
+        <div class="hero-image"
+             style="height:24.5%;background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url({% static 'search/images/single_background.jpg' %})">
+        </div>
+
+        <!-- Sidebar -->
+        <div class="">
+            <div class="row">
+                <div class="col-lg-2" style="display: flex">
+                    <nav id="sidebar">
+                        <div class="sidebar-header">
+                            <h3>Options</h3>
+                        </div>
+
+                        <ul class="list-unstyled components">
+                            <p>Dashboard</p>
+                            <li class="active">
+                                <a href="{% url 'SiteAdminDash' %}">Dashboard</a>
+                            </li>
+                            <li class="">
+                                <a href="{% url 'HotelList' %}">View Hotels</a>
+                            </li>
+                            <li class="">
+                                <a href="{% url 'AirlinesList' %}">View Airlines</a>
+                            </li>
+                            <li class="">
+                                <a href="{% url 'HotelPaymentLog' %}">View Payment Log for Hotel Booking</a>
+                            </li>
+                            <li class="">
+                                <a href="{% url 'AirlinesPaymentLog' %}">View Payment Log for Flight Booking</a>
+                            </li>
+                            <li class="">
+                                <a href="{% url 'ApproveHotelBooking' %}">Approve Hotel Booking</a>
+                            </li>
+
+                            <li class="">
+                                <a href="{% url 'ApproveFlightBooking' %}">Approve Flight Booking</a>
+                            </li>
+                            <li class="">
+                                <a href="{% url 'Statistics' %}">View Stats</a>
+                            </li>
+
+
+                        </ul>
+                    </nav>
+                </div>
+                <div class="col-lg-9">
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}

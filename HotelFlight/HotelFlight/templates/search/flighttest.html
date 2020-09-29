@@ -1,0 +1,507 @@
+{% extends "search/base.html" %}
+
+{% load easy_maps_tags %}
+{% load static %}
+{% load url_replace %}
+{% load url_get %}
+{% load widget_tweaks %}
+
+
+{% block title %}Search Hotels{% endblock title %}
+
+{% block css %}
+<link rel="stylesheet" type="text/css" href="{% static 'search/styles/bootstrap4/bootstrap.min.css' %}">
+<link href="{% static 'search/plugins/font-awesome-4.7.0/css/font-awesome.min.css' %}" rel="stylesheet"
+      type="text/css">
+<link rel="stylesheet" type="text/css" href="{% static 'search/styles/search.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'search/styles/responsive.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'search/styles/single_listing_styles.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'gijgo/js/gijgo.min.css' %}">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+{% endblock css %}
+
+{% block content %}
+<!-- Home -->
+
+<div class="offers">
+    <div class="hero-image"
+         style="background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url({% static 'search/images/single_background.jpg' %})">
+        <div class="hero-text">
+            <h1 style="margin-top:130px">{{hotel.Hotel_Name}}</h1>
+        </div>
+    </div>
+    <div class="">
+        <div class="row">
+            <div class="col-lg-3" style="display: flex">
+
+                <div class="search" style="align-items: stretch">
+                    <div class="search_inner">
+                        <!-- Search Contents -->
+
+                        <div class="container fill_height no-padding">
+                            <div class="row no-margin">
+                                <div class="col  no-padding">
+                                    <!-- Search Tabs -->
+
+                                    <div class="search_tabs_container">
+                                        <div class="search_tabs d-flex flex-lg-row flex-column align-items-lg-center align-items-start justify-content-lg-between justify-content-start">
+                                            <div class="search_tab d-flex flex-row align-items-center justify-content-lg-center justify-content-start">
+                                                <img src="{% static 'search/images/suitcase.png' %}"
+                                                     alt=""><span>hotels</span>
+                                            </div>
+                                            <div class="search_tab active d-flex flex-row align-items-center justify-content-lg-center justify-content-start">
+                                                <img src="{% static 'search/images/departure.png' %}" alt="">flights
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="search_panel">
+                                        <form action="{% url 'searchHotelPage' %} " id="search_form_1" method="get"
+                                              class="search_panel_content d-flex flex-lg-row flex-column align-items-lg-center align-items-start justify-content-lg-between justify-content-start">
+                                            <div class="search_item">
+                                                <div>destination</div>
+                                                {% url_get request 'hoteldest' as hoteldest %}
+                                                {% render_field hotelform.hoteldest class="destination search_input" placeholder=hotelform.hoteldest.label value=hoteldest %}
+                                            </div>
+                                            <div class="search_item">
+                                                <div>check in</div>
+                                                {% render_field hotelform.checkin class="check_in search_input" placeholder=hotelform.checkin.label%}
+                                            </div>
+                                            <div class="search_item">
+                                                <div>check out</div>
+                                                {% render_field hotelform.checkout class="check_out search_input" placeholder=hotelform.checkout.label%}
+                                            </div>
+                                            <div class="search_item">
+                                                <div>room</div>
+                                                {% render_field hotelform.room class="search_input room" placeholder=hotelform.room.label %}
+                                            </div>
+                                            <div class="search_item">
+                                                <div>adults</div>
+                                                {% render_field hotelform.adult class="search_input" placeholder=hotelform.adult.label %}
+                                            </div>
+                                            <button class="button search_button">
+                                                search<span></span><span></span><span></span>
+                                            </button>
+                                            {% csrf_token %}
+                                        </form>
+                                    </div>
+
+
+                                    <!-- Search Panel -->
+
+                                    <div class="search_panel active">
+                                        <form action="{% url 'searchFlightPage' %}" id="search_form_2"
+                                              class="search_panel_content d-flex flex-lg-row flex-column align-items-lg-center align-items-start justify-content-lg-between justify-content-start">
+
+                                            <div class="search_item">
+                                                <div>from</div>
+                                                {% render_field flightform.source class="from search_input" placeholder=flightform.source.label value=request.GET.source %}
+                                            </div>
+                                            <div class="search_item">
+                                                <div>to</div>
+                                                {% render_field flightform.dest class="to search_input" placeholder=flightform.dest.label value=request.GET.dest %}
+                                            </div>
+                                            <div class="search_item">
+                                                <div>depart</div>
+                                                {% render_field flightform.depart class="from search_input" placeholder=flightform.depart.label %}
+                                            </div>
+                                            <div class="search_item">
+                                                <div>adults</div>
+                                                {% render_field flightform.adult class="search_input" placeholder=flightform.adult.label %}
+                                            </div>
+                                            <div class="search_item">
+                                                <div>children</div>
+                                                {% render_field flightform.children class="search_input" placeholder=flightform.children.label %}
+                                            </div>
+                                            <button class="button search_button">
+                                                search<span></span><span></span><span></span></button>
+                                            {% csrf_token %}
+                                        </form>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="col-lg-9" style="margin-top:25px;margin-bottom: 150px">
+                <div class="container no-padding no-margin">
+                    <div class="row no-padding">
+                        <div class="offers_sorting_container">
+                            <ul class="offers_sorting">
+                                <li>
+                                    <span class="sorting_text">price</span>
+                                    <i class="fa fa-chevron-down"></i>
+                                    <ul>
+                                        <li class="sort_btn" data-isotope-option='{ "sortBy": "original-order" }'
+                                            data-parent=".price_sorting"><span>show all</span></li>
+                                        <li class="sort_btn" data-isotope-option='{ "sortBy": "price" }'
+                                            data-parent=".price_sorting"><span>ascending</span></li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <span class="sorting_text">location</span>
+                                    <i class="fa fa-chevron-down"></i>
+                                    <ul>
+                                        <li class="sort_btn" data-isotope-option='{ "sortBy": "original-order" }'>
+                                            <span>default</span></li>
+                                        <li class="sort_btn" data-isotope-option='{ "sortBy": "name" }'>
+                                            <span>alphabetical</span>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <span class="sorting_text">stars</span>
+                                    <i class="fa fa-chevron-down"></i>
+                                    <ul>
+                                        <li class="filter_btn" data-filter="*"><span>show all</span></li>
+                                        <li class="sort_btn" data-isotope-option='{ "sortBy": "stars" }'>
+                                            <span>ascending</span>
+                                        </li>
+                                        <li class="filter_btn" data-filter=".rating_3"><span>3</span></li>
+                                        <li class="filter_btn" data-filter=".rating_4"><span>4</span></li>
+                                        <li class="filter_btn" data-filter=".rating_5"><span>5</span></li>
+                                    </ul>
+                                </li>
+                                <li class="distance_item">
+                                    <span class="sorting_text">distance from center</span>
+                                    <i class="fa fa-chevron-down"></i>
+                                    <ul>
+                                        <li class="num_sorting_btn"><span>distance</span></li>
+                                        <li class="num_sorting_btn"><span>distance</span></li>
+                                        <li class="num_sorting_btn"><span>distance</span></li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <span class="sorting_text">reviews</span>
+                                    <i class="fa fa-chevron-down"></i>
+                                    <ul>
+                                        <li class="num_sorting_btn"><span>review</span></li>
+                                        <li class="num_sorting_btn"><span>review</span></li>
+                                        <li class="num_sorting_btn"><span>review</span></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+
+
+                        <!-- Offers Grid -->
+                        <div class="offers_grid">
+
+                            <!-- Single stop flights -->
+                            {% for ssflight in ssflights %}
+                            <!-- Item -->
+                            <div class="offers_item" style="padding-bottom: 50px;padding-top: 50px;
+                            padding-left:20px;border-color: gray;border-style: solid;border-width: 1px;;">
+
+                                <div class="row">
+                                    <div class="col-lg-2">
+                                        <div class="offers_text">
+                                            <div style="color: black;">
+                                                {{ssflight.AirCompany_Name}}
+                                            </div>
+                                            {{ssflight.Airplane_Number}} | {{ssflight.Aircraft}}
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-6 no-padding no-margin no-gutters">
+                                        <div class="offers_content">
+                                            <table>
+                                                <tr>
+                                                    <td width="25%">
+                                                        <div class="offers_text">
+                                                            {{ssflight.Date}}<br/>
+                                                            {{ssflight.Time}}
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div style="padding-left: 20px" align="center">
+                                                            {{ssflight.Source}}, {{ssflight.Source_Airport}}
+                                                            <br/>
+                                                            to
+                                                            <br/>
+                                                            {{ssflight.Destination}}, {{ssflight.Destination_Airport}}
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-1">
+                                        <div class="offers_text">
+                                            <div style="color: black;">
+                                                Duration:
+                                            </div>
+                                            {{ssflight.Duration}} min
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-1">
+                                        <div class="offers_text">
+                                            <div style="color: black;">
+                                                Price:
+                                            </div>
+                                            <div class="offers_price">
+                                                {{ssflight.Price}}৳
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-1" style="margin-left: 25px;">
+                                        <div class="button book_button" style="margin-top: 15px;">
+                                                <a href="check?FRID={{ssflight.FRID}}&FIDS={{ssflight.FIDS}}&FIDM1={{msflight.FIDM1}}&FIDM2={{msflight.FIDM2}}&ID2={{msflight.ID2}}&ID1={{msflight.ID1}}& {{ request.GET.urlencode }}">book</a>
+
+                                             </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+
+
+                            <!-- Multi stop flights -->
+                            {% for msflight in msflights %}
+                            <!-- Item -->
+                            <div class="offers_item" style="padding-bottom: 50px;padding-top: 50px;
+                            padding-left:20px;border-color: gray;border-style: solid;border-width: 1px;">
+                                <div class="row">
+                                    <div class="col-lg-2">
+                                        <table>
+                                            <br>
+                                            <tr>
+                                                <div class="offers_text">
+                                                    <div style="color: black;">
+                                                        {{msflight.SrcCompany}}
+                                                    </div>
+                                                    {{msflight.SrcAirNo}} | {{msflight.SrcAircraft}}
+                                                </div>
+                                            </tr>
+                                            <hr>
+                                            <tr>
+                                                <div class="offers_text">
+                                                    <div style="color: black;">
+                                                        {{msflight.DestCompany}}
+                                                    </div>
+                                                    {{msflight.DestAirNo}} | {{msflight.DestAircraft}}
+                                                </div>
+                                            </tr>
+                                        </table>
+                                    </div>
+
+                                    <div class="col-lg-6">
+                                        <table>
+                                            <tr>
+                                                <table>
+                                                    <tr>
+                                                        <td width="25%">
+                                                            <div class="offers_text">
+                                                                {{msflight.Date}}<br/>
+                                                                {{msflight.SrcTime}}
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <div style="padding-left: 20px" align="center">
+                                                                {{msflight.Source}}, {{msflight.SrcAirport}}
+                                                                <br/>
+                                                                to
+                                                                <br/>
+                                                                {{msflight.Intermediate}}, {{msflight.InterAirport}}
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </tr>
+                                            <hr>
+                                            <tr>
+                                                <table>
+                                                    <tr>
+                                                        <td width="25%">
+                                                            <div class="offers_text">
+                                                                {{msflight.Date}}<br/>
+                                                                {{msflight.DestTime}}
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <div style="padding-left: 20px" align="center">
+                                                                {{msflight.Intermediate}}, {{msflight.InterAirport}}
+                                                                <br/>
+                                                                to
+                                                                <br/>
+                                                                {{msflight.Destination}},
+                                                                {{msflight.DestAirport}}
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <div class="col-lg-1">
+                                        <table>
+                                            <br>
+                                            <tr>
+                                                <div class="offers_text">
+                                                    <div style="color: black;">
+                                                        Duration:
+                                                    </div>
+                                                    {{msflight.SrcDuration}} min
+                                                </div>
+                                            </tr>
+                                            <hr>
+                                            <tr>
+                                                <div class="offers_text">
+                                                    <div style="color: black;">
+                                                        Duration:
+                                                    </div>
+                                                    {{msflight.DestDuration}} min
+                                                </div>
+                                            </tr>
+                                        </table>
+                                    </div>
+
+                                    <div class="col-lg-1">
+                                        <table>
+                                            <br>
+                                            <tr>
+                                                <div class="offers_text">
+                                                    <div style="color: black;">
+                                                        Price:
+                                                    </div>
+                                                    <div class="offers_price" style="font-size: 30px;">
+                                                        {{msflight.firstPrice}}৳
+                                                    </div>
+                                                </div>
+                                            </tr>
+                                            <hr>
+                                            <tr>
+                                                <div class="offers_text">
+                                                    <div style="color: black;">
+                                                        Price:
+                                                    </div>
+                                                    <div class="offers_price" style="font-size: 30px;">
+                                                        {{msflight.secondPrice}}৳
+                                                    </div>
+                                                </div>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <div class="col-lg-1" style="margin-left: 25px;">
+                                        <div class="offers_text">
+                                            <div style="color: black;">
+                                                Total:
+                                            </div>
+                                            <div class="offers_price" style="font-size: 30px;">
+                                                {{msflight.firstPrice|add:msflight.secondPrice}}৳
+                                            </div>
+                                        </div>
+                                        <div class="button book_button">
+                                            <a href="check?FRID={{ssflight.FRID}}&FIDS={{ssflight.FIDS}}&FIDM1={{msflight.FIDM1}}&FIDM2={{msflight.FIDM2}}&ID2={{msflight.ID2}}&ID1={{msflight.ID1}}& {{ request.GET.urlencode }}">book</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+
+
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+
+    {% endblock content %}
+
+
+    {% block jscript %}
+    <script>
+        function getAllUrlParams(url) {
+            // get query string from url (optional) or window
+            var queryString = url ? url.split('?')[1] : window.location.search.slice(1);
+            // we'll store the parameters here
+            var obj = {};
+            // if query string exists
+            if (queryString) {
+                // stuff after # is not part of query string, so get rid of it
+                queryString = queryString.split('#')[0];
+                // split our query string into its component parts
+                var arr = queryString.split('&');
+                for (var i = 0; i < arr.length; i++) {
+                    // separate the keys and the values
+                    var a = arr[i].split('=');
+                    // set parameter name and value (use 'true' if empty)
+                    var paramName = a[0];
+                    var paramValue = typeof (a[1]) === 'undefined' ? true : a[1];
+                    // (optional) keep case consistent
+                    paramName = paramName.toLowerCase();
+                    if (typeof paramValue === 'string') paramValue = paramValue.toLowerCase();
+                    // if the paramName ends with square brackets, e.g. colors[] or colors[2]
+                    if (paramName.match(/\[(\d+)?\]$/)) {
+                        // create key if it doesn't exist
+                        var key = paramName.replace(/\[(\d+)?\]/, '');
+                        if (!obj[key]) obj[key] = [];
+                        // if it's an indexed array e.g. colors[2]
+                        if (paramName.match(/\[\d+\]$/)) {
+                            // get the index value and add the entry at the appropriate position
+                            var index = /\[(\d+)\]/.exec(paramName)[1];
+                            obj[key][index] = paramValue;
+                        } else {
+                            // otherwise add the value to the end of the array
+                            obj[key].push(paramValue);
+                        }
+                    } else {
+                        // we're dealing with a string
+                        if (!obj[paramName]) {
+                            // if it doesn't exist, create property
+                            obj[paramName] = paramValue;
+                        } else if (obj[paramName] && typeof obj[paramName] === 'string') {
+                            // if property does exist and it's a string, convert it to an array
+                            obj[paramName] = [obj[paramName]];
+                            obj[paramName].push(paramValue);
+                        } else {
+                            // otherwise add the property
+                            obj[paramName].push(paramValue);
+                        }
+                    }
+                }
+            }
+
+            return obj;
+        }
+
+        let jsTomorrow = new Date();
+        jsTomorrow.setDate(new Date().getDate()+1);
+        let today = new Date().getFullYear() + "-" + ("0" + (new Date().getMonth() + 1)).slice(-2) + "-" +
+            ("0" + new Date().getDate()).slice(-2);
+        let tomorrow = jsTomorrow.getFullYear() + "-" + ("0" + (jsTomorrow.getMonth() + 1)).slice(-2) + "-" +
+            ("0" + jsTomorrow.getDate()).slice(-2);
+        $('#id_checkin').datepicker({
+            uiLibrary: 'bootstrap4',
+            value: getAllUrlParams().checkin,
+            minDate: today,
+            format: 'yyyy-mm-dd',
+            size: 'small'
+        });
+        $('#id_checkout').datepicker({
+            uiLibrary: 'bootstrap4',
+            value: getAllUrlParams().checkout,
+            minDate: tomorrow,
+            format: 'yyyy-mm-dd',
+            size: 'small'
+        });
+        $('#id_depart').datepicker({
+            uiLibrary: 'bootstrap4',
+            value: getAllUrlParams().depart,
+            minDate: tomorrow,
+            format: 'yyyy-mm-dd',
+            size: 'small'
+        });
+
+    </script>
+    {% endblock jscript %}

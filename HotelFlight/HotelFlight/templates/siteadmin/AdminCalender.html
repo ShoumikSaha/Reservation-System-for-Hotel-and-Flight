@@ -1,0 +1,116 @@
+{% extends "search/base.html" %}
+
+{% load static %}
+{% load url_replace %}
+{% load url_get %}
+{% load widget_tweaks %}
+
+
+{% block title %}Calender | {{ request.user }}{% endblock title %}
+
+{% block css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'search/styles/bootstrap4/bootstrap.min.css' %}">
+    <link href="{% static 'search/plugins/font-awesome-4.7.0/css/font-awesome.min.css' %}" rel="stylesheet"
+          type="text/css">
+    <link rel="stylesheet" type="text/css" href="{% static 'search/styles/search.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'search/styles/single_listing_styles.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'search/styles/responsive.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'gijgo/js/gijgo.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'adminpanel/sidebar.css' %}">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <!-- Calender -->
+    <link href="{% static 'adminpanel/fullcalender/packages/core/main.css' %}" rel="stylesheet">
+    <link href="{% static 'adminpanel/fullcalender/packages/daygrid/main.css' %}" rel="stylesheet">
+    <link href="{% static 'adminpanel/fullcalender/packages/bootstrap/main.css' %}" rel="stylesheet">
+
+
+{% endblock css %}
+
+{% block content %}
+
+    <div class="offers">
+
+        <div class="hero-image"
+             style="height:24.5%;background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url({% static 'search/images/single_background.jpg' %})">
+        </div>
+
+        <!-- Sidebar -->
+        <div class="">
+            <div class="row">
+                <div class="col-lg-2" style="display: flex">
+                    <nav id="sidebar">
+                        <div class="sidebar-header">
+                            <h3>Options</h3>
+                        </div>
+
+                        <ul class="list-unstyled components">
+                            <p>Calender</p>
+                            <li>
+                                <a href="{% url 'hotelAdminDash' %}">Dashboard</a>
+                            </li>
+                            <li>
+                                <a href="{% url 'hotelAdminUpdate' %}">Update Hotel</a>
+                            </li>
+                            <li>
+                                <a href="{% url 'hotelAdminRooms' %}">View Rooms</a>
+                            </li>
+                            <li>
+                                <a href="{% url 'hotelAdminAddRoom' %}">Add Rooms</a>
+                            </li>
+                            <li>
+                                <a href="{% url 'hotelAdminBookings' %}">View Bookings</a>
+                            </li>
+                            <li class="active">
+                                <a href="{% url 'hotelAdminCalender' %}">Calender</a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+                <div class="col-lg-9" style="margin: 20px;">
+                    <div id='calendar'></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}
+
+{% block jscript %}
+    <script src="{% static 'adminpanel/fullcalender/packages/core/main.js' %}"></script>
+    <script src="{% static 'adminpanel/fullcalender/packages/daygrid/main.js' %}"></script>
+    <script src="{% static 'adminpanel/fullcalender/packages/bootstrap/main.js' %}"></script>
+    <script type="text/javascript">
+        document.addEventListener('DOMContentLoaded', function () {
+            var calendarEl = document.getElementById('calendar');
+
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                height: 600,
+                plugins: ['dayGrid'],
+
+                eventClick: function (info) {
+                    alert('Description: ' + info.event.title);
+                },
+
+                events: [
+                    {% for datum in data %}
+                        {
+                            title: 'Room(s):{{ datum.TotalRooms }},Type:{{ datum.RoomType }}   Booked by: {{ datum.first_name }} {{ datum.last_name }},  Phone:{{ datum.Phone }}, E-mail:{{ datum.email }}',
+                            description: 'test',
+                            start: '{{ datum.Checkin_Date|date:"Y-m-d" }}T14:00:00',
+                            end: '{{ datum.Checkout_Date|date:"Y-m-d" }}T12:00:00',
+                            allDay: false,
+                            color: '{% cycle '#fcd49c' 'lightblue' %}',
+                        },
+                    {% endfor %}
+                ],
+
+            });
+
+
+            calendar.render();
+        });
+
+    </script>
+
+{% endblock jscript %}

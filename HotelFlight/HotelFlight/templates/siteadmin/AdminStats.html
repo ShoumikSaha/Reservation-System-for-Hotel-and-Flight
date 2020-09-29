@@ -1,0 +1,388 @@
+{% extends "search/base.html" %}
+
+{% load static %}
+{% load url_replace %}
+{% load url_get %}
+{% load widget_tweaks %}
+
+
+{% block title %}Dashboard | {{ request.user }}{% endblock title %}
+
+{% block css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'search/styles/bootstrap4/bootstrap.min.css' %}">
+    <link href="{% static 'search/plugins/font-awesome-4.7.0/css/font-awesome.min.css' %}" rel="stylesheet"
+          type="text/css">
+    <link rel="stylesheet" type="text/css" href="{% static 'search/styles/search.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'search/styles/single_listing_styles.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'search/styles/responsive.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'gijgo/js/gijgo.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'adminpanel/sidebar.css' %}">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+{% endblock css %}
+
+{% block content %}
+
+    <div class="offers">
+
+        <div class="hero-image"
+             style="height:24.5%;background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url({% static 'search/images/single_background.jpg' %})">
+        </div>
+
+        <!-- Sidebar -->
+        <div class="">
+            <div class="row">
+                <div class="col-lg-2" style="display: flex">
+                    <nav id="sidebar">
+                        <div class="sidebar-header">
+                            <h3>Options</h3>
+                        </div>
+
+                        <ul class="list-unstyled components">
+                            <p>Statistics</p>
+                            <li class="">
+                                <a href="{% url 'SiteAdminDash' %}">Dashboard</a>
+                            </li>
+                            <li class="">
+                                <a href="{% url 'HotelList' %}">View Hotels</a>
+                            </li>
+                            <li class="">
+                                <a href="{% url 'AirlinesList' %}">View Airlines</a>
+                            </li>
+                            <li class="">
+                                <a href="{% url 'HotelPaymentLog' %}">View Payment Log for Hotel Booking</a>
+                            </li>
+                            <li class="">
+                                <a href="{% url 'AirlinesPaymentLog' %}">View Payment Log for Flight Booking</a>
+                            </li>
+                            <li class="">
+                                <a href="{% url 'ApproveHotelBooking' %}">Approve Hotel Booking</a>
+                            </li>
+
+                            <li class="">
+                                <a href="{% url 'ApproveFlightBooking' %}">Approve Flight Booking</a>
+                            </li>
+                            <li class="active">
+                                <a href="{% url 'Statistics' %}">View Stats</a>
+                            </li>
+
+                        </ul>
+                    </nav>
+                </div>
+                <div class="col-lg-1" style="margin-top: 50pt;">
+                    <button type="button" onclick="hotelClick()">Hotel</button>
+                    <button type="button" onclick="flightClick()">Flight</button>
+                </div>
+                <div class="col-lg-9" style="width: 60%; margin-top: 50pt;">
+                    <body>
+                    <style>
+                        .container {
+                            width: 50%;
+                            height: 50%;
+                        }
+                    </style>
+                    <body>
+
+
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-12">
+                            <canvas id="myChart" ></canvas>
+                            </div>
+
+                        </div>
+                        <div class="row" >
+                            <div class="col-lg-12">
+                            <canvas id="myChart2" ></canvas>
+                            </div>
+
+                        </div>
+
+                        <div class="row">
+                            <div class="col-lg-12">
+                            <canvas id="myChart3"  style="display:none;" ></canvas>
+                            </div>
+
+                        </div>
+                        <div class="row" >
+                            <div class="col-lg-12">
+                            <canvas id="myChart4" style="display:none;" ></canvas>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    </body>
+
+                    <!--script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.js"></script -->
+                    <!--script src="https://code.jquery.com/jquery-3.3.1.min.js"></script -->
+                    <!-- <script src="static/siteadmin/js/linechart.js"></script>  -->
+                    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+                    </body>
+                    <!--    <div class="mySlides">
+                    <div class="numbertext">1/ 4</div>
+
+                        <img src="{% static 'siteadmin/barPlotFlightBooking.png' %}"
+                             alt="No of flights booked in a day" width="80%" height="500px" style="width: 100%;margin-left:45px;"
+                        class="cursor">
+
+                    </div>
+                    <div class="mySlides">
+                    <div class="numbertext">1/ 4</div>
+
+                        <img src="{% static 'siteadmin/barPlotFlightRevenue.png' %}"
+                             alt="Revenue from flight per day" width="80%" height="500px" style="width: 100%;margin-left:45px;">
+
+                    </div>
+                    <div class="mySlides">
+                    <div class="numbertext">1/ 4</div>
+
+                        <img src="{% static 'siteadmin/barPlotHotelBooking.png' %}"
+                             alt="No of rooms booked per day" width="80%" height="500px" style="width: 100%;margin-left:45px;">
+
+                    </div>
+                     <div class="mySlides">
+                    <div class="numbertext">1/ 4</div>
+
+                        <img src="{% static 'siteadmin/barPlotHotelRevenue.png' %}"
+                             alt="Revenue from hotels per day" width="80%" height="500px" style="width: 100%;margin-left:45px;">
+
+                    </div>  -->
+
+                    <!-- Next and previous buttons -->
+                    <!-- <a class="prev" style="color: #fff;" onclick="plusSlides(-1)">&#10094;</a>
+                    <a class="next" style="color: #fff;" onclick="plusSlides(1)">&#10095;</a>
+
+
+                    <div class="caption-container">
+                        <p id="caption"></p>
+                    </div> -->
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+{% endblock content %}
+
+
+{% block jscript %}
+    <script>
+
+        /*function renderChart(data, labels) {
+            var ctx = document.getElementById("myChart").getContext('2d');
+            var myChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Hotel Booking per day',
+                        data: data,
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)'
+                    }]
+                },
+            });
+        }
+        function renderChart2(data, labels) {
+            var ctx = document.getElementById("myChart2").getContext('2d');
+            var myChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Flight Booking per day',
+                        data: data,
+                        borderColor: 'rgba(192, 192, 75, 1)',
+                        backgroundColor: 'rgba(192, 192, 75, 0.2)'
+                    }]
+
+                },
+            });
+        }
+
+        $("#renderBtn").click(
+            function () {
+                var row;
+                var yLabel = [];
+                var xLabel = [];
+                {% for row in data %}
+                    {
+                        yLabel.push({{ row.1 }});
+                        xLabel.push('{{ row.2 }}');
+
+                    }
+                {% endfor %}
+
+
+                //dataNew = [20000, 14000, 12000, 15000, 18000, 19000, 22000];
+                //labels =  ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"];
+                renderChart(yLabel, xLabel);
+                //renderChart2(yLabel2, xLabel2);
+                //renderChart(dataNew, labels);
+            }
+        );*/
+        /*HOTEL GRAPHS*///////
+        /*Line Graph*/
+        var row;
+        var yLabel = [];
+        var xLabel = [];
+        {% for row in data1 %}
+            yLabel.push({{ row.1 }});
+            xLabel.push('{{ row.2 }}');
+        {% endfor %}
+
+
+        var ctx = document.getElementById('myChart').getContext('2d');
+        var chart = new Chart(ctx, {
+            // The type of chart we want to create
+            type: 'line',
+
+            // The data for our dataset
+            data: {
+                //labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+
+
+                labels: xLabel,
+                datasets: [{
+                    label: 'Revenue from hotel booking per day',
+                    backgroundColor: 'rgb(100, 100, 255)',
+                    borderColor: 'rgb(100, 100, 255)',
+                    //data: [0, 10, 5, 2, 20, 30, 45]
+                    data: yLabel
+                }]
+            },
+
+            // Configuration options go here
+            options: {}
+        });
+
+        /*Pie Graph*/
+        var row2;
+        var yLabel2 = [];
+        var xLabel2 = [];
+        var color = [];
+        var i=0;
+        var temp;
+        {% for row2 in data2 %}
+            yLabel2.push({{ row2.1 }});
+            xLabel2.push('{{ row2.2 }}');
+            temp = 150-i*20;
+            //var temp2 = 'rgb(' + str(temp) + ', ' + str(temp) + ', 255),';
+            //color.push(temp2);
+            i=i+1;
+        {% endfor %}
+
+
+        data = {
+                datasets: [{
+                    //data: [10, 20, 30],
+                    data: yLabel2,
+                    backgroundColor: ['rgb(150, 150, 255)', 'rgb(100, 100, 255)', 'rgb(50, 50, 255)', ]
+                    //backgroundColor: color
+                }],
+
+                // These labels appear in the legend and in the tooltips when hovering different arcs
+                labels: xLabel2
+
+
+            };
+        var ctx2 = document.getElementById('myChart2').getContext('2d');
+        var myPieChart = new Chart(ctx2, {
+            type: 'pie',
+            data: data
+        });
+
+        /*FLIGHT GRAPHS*///////
+        /*Line Graph*/
+        var row3;
+        var yLabel3 = [];
+        var xLabel3 = [];
+        {% for row3 in data3 %}
+            yLabel3.push({{ row3.1 }});
+            xLabel3.push('{{ row3.2 }}');
+        {% endfor %}
+        console.log(yLabel3);
+        console.log(xLabel3);
+
+        var ctx3 = document.getElementById('myChart3').getContext('2d');
+        var chart3 = new Chart(ctx3, {
+            // The type of chart we want to create
+            type: 'line',
+
+            // The data for our dataset
+            data: {
+                //labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+
+
+                labels: xLabel3,
+                datasets: [{
+                    label: 'Revenue from flight booking per day',
+                    backgroundColor: 'rgb(255, 99, 132)',
+                    borderColor: 'rgb(255, 99, 132)',
+                    //data: [0, 10, 5, 2, 20, 30, 45]
+                    data: yLabel3
+                }]
+            },
+
+            // Configuration options go here
+            options: {}
+        });
+
+        /*Pie Graph*/
+        var row4;
+        var yLabel4 = [];
+        var xLabel4 = [];
+        var color = [];
+        var i=0;
+        var temp;
+        {% for row4 in data4 %}
+            yLabel4.push({{ row4.1 }});
+            xLabel4.push('{{ row4.2 }}');
+            temp = 150-i*20;
+            //var temp2 = 'rgb(' + str(temp) + ', ' + str(temp) + ', 255),';
+            //color.push(temp2);
+            i=i+1;
+        {% endfor %}
+
+
+        data = {
+                datasets: [{
+                    //data: [10, 20, 30],
+                    data: yLabel4,
+                    backgroundColor: [ 'rgb(255, 120, 150)', 'rgb(255, 90, 120)', ]
+                    //backgroundColor: color
+                }],
+
+                // These labels appear in the legend and in the tooltips when hovering different arcs
+                labels: xLabel4
+
+
+            };
+        var ctx4 = document.getElementById('myChart4').getContext('2d');
+        var myPieChart4 = new Chart(ctx4, {
+            type: 'pie',
+            data: data
+        });
+
+        let input1= document.getElementById('myChart');
+        let input2= document.getElementById('myChart2');
+        let input3= document.getElementById('myChart3');
+        let input4= document.getElementById('myChart4');
+        //input3.style.display="none";
+        function hotelClick() {
+            input1.style.display="";
+            input2.style.display="";
+            input3.style.display="none";
+            input4.style.display="none";
+        }
+        function flightClick() {
+            input1.style.display="none";
+            input2.style.display="none";
+            input3.style.display="";
+            input4.style.display="";
+        }
+    </script>
+{% endblock jscript %}
