@@ -4,7 +4,7 @@ A web based hotel and flight booking application
 ## Installation guide 
   * Install __Python__ and __PIP__
   * Clone the repository
-    * ```git clone https://github.com/iamsanjaymalakar/MyHotelFlight.git```
+    * ```git clone  https://github.com/ShoumikSaha/Reservation-System-for-Hotel-and-Flight.git```
   * Enter cloned folder
     * ```cd MyHotelFlight```
   * Setup a virtual environment
